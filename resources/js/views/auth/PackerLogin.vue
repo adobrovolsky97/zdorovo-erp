@@ -63,7 +63,7 @@ export default {
                     User.getMe()
                         .then((response) => {
                             this.$store.commit('setPackerUser', response.data.data);
-                            this.$router.push({name: 'warehouse'});
+                            this.$router.push({name: 'packaging'});
                         })
                 })
                 .catch(err => {
