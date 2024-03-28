@@ -1,0 +1,36 @@
+{
+  "node_modules/@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff": {
+    "file": "assets/dm-mono-latin-400-normal-f8592521.woff",
+    "src": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff"
+  },
+  "node_modules/@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2": {
+    "file": "assets/dm-mono-latin-400-normal-2ded91e0.woff2",
+    "src": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2"
+  },
+  "node_modules/@fontsource/dm-mono/files/dm-mono-latin-ext-400-normal.woff": {
+    "file": "assets/dm-mono-latin-ext-400-normal-9e4605ed.woff",
+    "src": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-ext-400-normal.woff"
+  },
+  "node_modules/@fontsource/dm-mono/files/dm-mono-latin-ext-400-normal.woff2": {
+    "file": "assets/dm-mono-latin-ext-400-normal-060163f1.woff2",
+    "src": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-ext-400-normal.woff2"
+  },
+  "resources/js/app.css": {
+    "file": "assets/app-2ae8f497.css",
+    "src": "resources/js/app.css"
+  },
+  "resources/js/app.js": {
+    "assets": [
+      "assets/dm-mono-latin-ext-400-normal-060163f1.woff2",
+      "assets/dm-mono-latin-ext-400-normal-9e4605ed.woff",
+      "assets/dm-mono-latin-400-normal-2ded91e0.woff2",
+      "assets/dm-mono-latin-400-normal-f8592521.woff"
+    ],
+    "css": [
+      "assets/app-2ae8f497.css"
+    ],
+    "file": "assets/app-b48339cf.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  }
+}
