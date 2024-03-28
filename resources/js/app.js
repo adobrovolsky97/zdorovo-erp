@@ -10,7 +10,6 @@ import vue3GoogleLogin from 'vue3-google-login'
 
 import axios from "axios";
 
-axios.defaults.baseURL = APP_URL;
 axios.defaults.headers['Content-Type'] = 'application/json';
 axios.defaults.headers['Accept'] = 'application/json';
 
