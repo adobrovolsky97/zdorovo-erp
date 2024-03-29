@@ -5,7 +5,7 @@ import {createApp} from 'vue';
 import router from "./router.js";
 import store from './store'
 
-import {APP_URL, GOOGLE_CLIENT_ID} from "./env.js";
+import {GOOGLE_CLIENT_ID} from "./env.js";
 import vue3GoogleLogin from 'vue3-google-login'
 
 import axios from "axios";

@@ -18,8 +18,18 @@
                     <div class="label">
                         <span class="label-text">Назва товару</span>
                     </div>
-                    <input type="text" v-model="filters.search" placeholder="Назва товару"
-                           class="input input-bordered w-full"/>
+                    <div class="join w-full">
+                        <div class="w-full">
+                            <div>
+                                <input type="text" v-model="filters.search" placeholder="Назва товару"
+                                       class="input input-bordered w-full join-item"/>
+                            </div>
+                        </div>
+                        <div class="indicator">
+                            <button @click="clearSearch" class="btn btn-outline join-item">Очистити</button>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="w-full">
                     <TagInput v-model="filters['categories[]']" @updated="handleCategoryUpdated" :options="categories"
@@ -125,6 +135,9 @@ export default {
         },
         handleCategoryUpdated(categories) {
             this.filters['categories[]'] = categories;
+        },
+        clearSearch() {
+            this.filters.search = '';
         },
         fetchPackage() {
             axios.get('/api/packages')

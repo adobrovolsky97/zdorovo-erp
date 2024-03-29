@@ -15,6 +15,23 @@
 
             <TableSkeleton :items="15" v-if="isLoading"/>
 
+            <div v-if="isModalShown" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div class="fixed inset-0 bg-opacity-75 transition-opacity"></div>
+
+                <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                        <div class="card w-96 bg-neutral text-neutral-content">
+                            <div class="card-body items-center text-center border rounded-lg">
+                                <h2 class="card-title mb-2">Чи підтверджуєте Ви видалення?</h2>
+                                <div class="card-actions justify-end">
+                                    <button @click="deleteProduct" class="btn btn-warning">Так</button>
+                                    <button @click="hideDeleteModal" class="btn btn-outline">Ні</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="mt-8 border rounded-lg p-4" v-if="!isLoading && package.products?.length">
                 <div class="overflow-x-auto">
                     <table class="table table-zebra">
@@ -47,7 +64,7 @@
                                         <polyline points="22 4 12 14.01 9 11.01"/>
                                     </svg>
                                 </button>
-                                <button @click="deleteProduct(product.id)" class="btn btn-error btn-sm btn-circle">
+                                <button @click="showDeleteModal(product)" class="btn btn-error btn-sm btn-circle">
                                     <svg class="h-5 w-5 text-red-200" fill="none" viewBox="0 0 24 24"
                                          stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -78,7 +95,9 @@ export default {
     components: {Item, TableSkeleton, TagInput, Pagination},
     data() {
         return {
+            productToDelete: null,
             package: [],
+            isModalShown: false,
             isLoading: true,
         }
     },
@@ -100,14 +119,31 @@ export default {
                     this.isLoading = false;
                 })
         },
-        deleteProduct(id) {
-            axios.delete(`/api/packages/products/${id}`)
+        showDeleteModal(product) {
+            this.productToDelete = product;
+            this.isModalShown = true;
+        },
+        hideDeleteModal() {
+            this.productToDelete = null;
+            this.isModalShown = false;
+        },
+        deleteProduct() {
+
+            if (!this.productToDelete) {
+                return;
+            }
+
+            axios.delete(`/api/packages/products/${this.productToDelete.id}`)
                 .then((response) => {
                     this.package = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
                 })
+                .finally(() => {
+                    this.productToDelete = null;
+                    this.isModalShown = false;
+                });
         },
         updateProduct(id, qty) {
             if (qty < 1) {

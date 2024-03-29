@@ -15,6 +15,26 @@
     </div>
 </template>
 
-<script setup>
+<script>
 import Navbar from "../dashboard/Navbar.vue";
+
+export default {
+    components: {
+        Navbar
+    },
+    mounted() {
+
+        axios.get('/api/users/me');
+
+        if (this.$route.path === '/') {
+            if (this.$store.state.packer_user) {
+                this.$router.push({name: 'packaging'});
+            }
+
+            if (this.$store.state.user) {
+                this.$router.push({name: 'products'});
+            }
+        }
+    }
+}
 </script>
