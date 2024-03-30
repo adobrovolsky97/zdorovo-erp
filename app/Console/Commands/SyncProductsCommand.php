@@ -31,6 +31,11 @@ class SyncProductsCommand extends Command
         $preloadedProducts = $productService->find([['barcode', 'not_null'], ['bimpsoft_uuid', 'null']]);
         $page = 1;
 
+        if ($preloadedProducts->isEmpty()) {
+            $this->warn('No products found in the database to sync with bimpsoft');
+            return;
+        }
+
         while (!empty($products = $bimpsoftService->getProducts($page))) {
 
             foreach ($products as $product) {
