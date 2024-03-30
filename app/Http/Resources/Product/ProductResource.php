@@ -22,16 +22,17 @@ class ProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = [
-            'id'           => $this->id,
-            'external_id'  => $this->external_id,
-            'name'         => $this->name,
-            'pack'         => $this->pack,
-            'category'     => [
+            'id'                 => $this->id,
+            'external_id'        => $this->external_id,
+            'name'               => $this->name,
+            'pack'               => $this->pack,
+            'category'           => [
                 'id'   => $this->category?->id,
                 'name' => $this->category?->name
             ],
-            'is_available' => $this->is_available,
-            'image'        => $this->getFirstMediaUrl('image')
+            'is_available'       => $this->is_available,
+            'is_synced_with_crm' => !empty($this->bimpsoft_uuid),
+            'image'              => $this->getFirstMediaUrl('image')
         ];
 
         if (Auth::user() instanceof Packer) {

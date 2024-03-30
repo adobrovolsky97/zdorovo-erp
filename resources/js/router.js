@@ -14,6 +14,7 @@ import PackerLogin from "./views/auth/PackerLogin.vue";
 import List from "./views/packers/List.vue";
 import Packaging from "./views/packer/Packaging.vue";
 import Package from "./views/packer/Package.vue";
+import PackagesList from "./views/Package/List.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -34,6 +35,14 @@ const router = createRouter({
                     path: '/products',
                     name: 'products',
                     component: ProductsList,
+                    meta: {
+                        middleware: [auth]
+                    }
+                },
+                {
+                    path: '/packages',
+                    name: 'packages',
+                    component: PackagesList,
                     meta: {
                         middleware: [auth]
                     }

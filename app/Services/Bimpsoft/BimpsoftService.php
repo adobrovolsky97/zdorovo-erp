@@ -43,13 +43,56 @@ class BimpsoftService implements BimpsoftServiceInterface
     {
         $this->getTokenIfNotSet();
 
+        $limit = 100;
+
         $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/nomenclature/api-readList', [
-           'pagination' => [
-               'count' => 200,
-               'offset' => 0
-           ]
+            'pagination' => [
+                'count'  => $limit,
+                'offset' => ($page - 1) * $limit
+            ]
         ]);
-        dd($response->json());
+
+        $response->throwIfServerError();
+        $response->throwIf(!($response->json('success') ?? false));
+
+        return $response->json('data') ?? [];
+    }
+
+    /**
+     * Send order to bimpsoft
+     *
+     * @param array $data
+     * @return string
+     * @throws RequestException
+     * @throws Exception
+     */
+    public function sendOrder(array $data): string
+    {
+        $this->getTokenIfNotSet();
+
+        $payload = [
+            'projectUuid'        => config('bimpsoft.project_uuid'),
+            'managerUuid'        => config('bimpsoft.manager_uuid'),
+            'contractUuid'       => config('bimpsoft.contract_uuid'),
+            'lineOfBusinessUuid' => config('bimpsoft.line_of_business_uuid'),
+            'organizationUuid'   => config('bimpsoft.organization_uuid'),
+            'warehouseUuid'      => config('bimpsoft.warehouse_uuid'),
+            'customerUuid'       => config('bimpsoft.customer_uuid'),
+            'statusUuid'         => config('bimpsoft.status_uuid'),
+            'addVAT'             => false,
+            'setUpByContract'    => false,
+            'stocks'             => $data
+        ];
+
+
+        $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/invoiceForCustomerPayment/api-insert', $payload);
+        $response->throwIf(!($response->json('success') ?? false));
+
+        if (empty($response->json('data')['uuid'])) {
+            throw new Exception('Order not created');
+        }
+
+        return $response->json('data')['uuid'];
     }
 
     /**
@@ -68,6 +111,7 @@ class BimpsoftService implements BimpsoftServiceInterface
         ]);
 
         $response->throwIfServerError();
+        $response->throwIf(!($response->json('success') ?? false));
 
         if (empty($response->json('data')['accessToken'])) {
             throw new Exception('Invalid credentials');
@@ -80,6 +124,7 @@ class BimpsoftService implements BimpsoftServiceInterface
         ]);
 
         $response->throwIfServerError();
+        $response->throwIf(!($response->json('success') ?? false));
 
         if (empty($response->json('data')['companyAccessToken'])) {
             throw new Exception('Invalid credentials');

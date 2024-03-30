@@ -58,5 +58,8 @@ Route::group(['middleware' => ['auth:api,packer']], function () {
         Route::get('', [PackageController::class, 'getPackage']);
         Route::post('products/{product}', [PackageController::class, 'addProduct']);
         Route::delete('products/{product}', [PackageController::class, 'removeProduct']);
+
+        Route::post('{package}/send', [PackageController::class, 'send']);
+        Route::get('', [PackageController::class, 'index']);
     });
 });

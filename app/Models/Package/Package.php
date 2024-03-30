@@ -4,16 +4,20 @@ namespace App\Models\Package;
 
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
 use App\Enum\Package\Status;
+use App\Models\Packer\Packer;
 use App\Models\Product\Product;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Package
  *
  * @property integer $id
+ * @property string $order_uuid
+ * @property integer $packer_id
  * @property Status $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -27,6 +31,7 @@ class Package extends BaseModel
      */
     protected $fillable = [
         'status',
+        'order_uuid',
         'packer_id',
     ];
 
@@ -37,7 +42,7 @@ class Package extends BaseModel
         'status' => Status::class
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -46,6 +51,14 @@ class Package extends BaseModel
                 $builder->where('packer_id', Auth::guard('packer')->id());
             });
         }
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function packer(): BelongsTo
+    {
+        return $this->belongsTo(Packer::class, 'packer_id');
     }
 
     /**

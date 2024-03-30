@@ -6,7 +6,7 @@
             <div
                 class="gap-4 mt-2">
                 <p class="badge badge-outline py-4 text-left text-sm">Запаковано позицій: {{
-                        package.products?.length ?? 0
+                        package?.products?.length ?? 0
                     }}</p>
             </div>
         </div>
@@ -15,7 +15,8 @@
 
             <TableSkeleton :items="15" v-if="isLoading"/>
 
-            <div v-if="isModalShown" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div v-if="isModalShown" class="relative z-10" aria-labelledby="modal-title" role="dialog"
+                 aria-modal="true">
                 <div class="fixed inset-0 bg-opacity-75 transition-opacity"></div>
 
                 <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -32,7 +33,30 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-8 border rounded-lg p-4" v-if="!isLoading && package.products?.length">
+
+            <div v-if="isSendModalShown" class="relative z-10" aria-labelledby="modal-title" role="dialog"
+                 aria-modal="true">
+                <div class="fixed inset-0 bg-opacity-75 transition-opacity"></div>
+
+                <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                        <div class="card w-96 bg-neutral text-neutral-content">
+                            <div class="card-body items-center text-center border rounded-lg">
+                                <h2 class="card-title mb-2">Чи підтверджуєте Ви відправку замовлення у Bimpsoft?</h2>
+                                <div class="card-actions justify-end">
+                                    <button @click="sendToCrm" class="btn btn-success">Так</button>
+                                    <button @click="isSendModalShown = false" class="btn btn-outline">Ні</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border rounded-lg p-4" v-if="!isLoading && package?.products?.length">
+                <div class="w-full flex flex-row justify-end">
+                    <button @click="isSendModalShown = true" class="btn btn-success self-end">Відправити в Bimpsoft
+                    </button>
+                </div>
                 <div class="overflow-x-auto">
                     <table class="table table-zebra">
                         <!-- head -->
@@ -46,7 +70,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="product in package.products" :key="product.id">
+                        <tr v-for="product in package?.products" :key="product.id">
                             <th>{{ product.id }}</th>
                             <th>{{ product.name }}</th>
                             <th>
@@ -77,7 +101,7 @@
                     </table>
                 </div>
             </div>
-            <div v-if="!isLoading && !package.products?.length">
+            <div v-if="!isLoading && !package?.products?.length">
                 <p class="text-center text-2xl font-bold">Немає запакованих товарів</p>
             </div>
         </div>
@@ -95,6 +119,7 @@ export default {
     components: {Item, TableSkeleton, TagInput, Pagination},
     data() {
         return {
+            isSendModalShown: false,
             productToDelete: null,
             package: [],
             isModalShown: false,
@@ -144,6 +169,21 @@ export default {
                     this.productToDelete = null;
                     this.isModalShown = false;
                 });
+        },
+        sendToCrm() {
+            axios.post('/api/packages/' + this.package.id + '/send')
+                .then(() => {
+                    this.isSendModalShown = false;
+                    toast("Замовлення відправлено у Bimpsoft", {
+                        "position": "bottom-right",
+                        "theme": this.$store.state.theme,
+                        "type": "success",
+                    })
+                    this.package = null;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         },
         updateProduct(id, qty) {
             if (qty < 1) {

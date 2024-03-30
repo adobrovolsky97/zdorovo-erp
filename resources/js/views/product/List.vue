@@ -12,8 +12,6 @@
         </div>
 
         <div class="mt-8">
-            {{ search.categories }}
-
             <div class="form mb-8 flex flex-row justify-between items-start gap-4">
                 <div class="w-full">
                     <div class="label">
@@ -34,6 +32,16 @@
                         <option :value="null">Показувати всі</option>
                         <option :value="1">Лише в наявності</option>
                         <option :value="0">Лише не в наявності</option>
+                    </select>
+                </div>
+                <div class="w-full">
+                    <div class="label">
+                        <span class="label-text">Bimpsoft Синхронізація</span>
+                    </div>
+                    <select class="select select-bordered w-full" v-model="filters.is_synced_with_crm">
+                        <option :value="null">Показувати всі</option>
+                        <option :value="1">Лише синхронізовані</option>
+                        <option :value="0">Лише не синхронізовані</option>
                     </select>
                 </div>
             </div>
@@ -77,6 +85,7 @@ export default {
             search: '',
             filters: {
                 is_available: null,
+                is_synced_with_crm: null,
                 page: 1,
                 'categories[]': [],
                 search: '',

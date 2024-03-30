@@ -23,12 +23,12 @@
                                 product.is_available ? 'Відображається' : 'Не відображається'
                             }}</span>
                     </div>
-                    <div class="flex flex-row gap-2 justify-center items-center">
+                    <div v-if="product.is_synced_with_crm" class="flex flex-row gap-2 justify-center items-center">
                         <button @click="decrement" class="btn btn-sm btn-circle btn-warning btn-outline">-</button>
                         <input type="text" v-model="qty" class="input input-sm input-bordered w-24">
                         <button @click="increment" class="btn btn-circle btn-sm btn-warning btn-outline">+</button>
                     </div>
-                    <button @click="addProduct" class="btn btn-outline btn-sm mt-2"
+                    <button v-if="product.is_synced_with_crm" @click="addProduct" class="btn btn-outline btn-sm mt-2"
                             :class="{'btn-success': localPackedProduct === null, 'btn-warning': localPackedProduct !== null}">
                         {{ localPackedProduct === null ? 'Запакувати' : 'Запаковано' }}
                     </button>

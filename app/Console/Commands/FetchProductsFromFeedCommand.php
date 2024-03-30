@@ -100,6 +100,7 @@ class FetchProductsFromFeedCommand extends Command
             /** @var Product $existingProduct */
             $existingProduct->update([
                 'name'         => $product->name->__toString(),
+                'barcode'      => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
                 'is_available' => $isAvailable,
                 'deleted_at'   => null,
             ]);
@@ -117,6 +118,7 @@ class FetchProductsFromFeedCommand extends Command
         $productModel = $this->productService->create([
             'external_id'  => $id,
             'name'         => $product->name->__toString(),
+            'barcode'      => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
             'is_available' => $isAvailable,
         ]);
 

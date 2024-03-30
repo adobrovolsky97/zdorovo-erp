@@ -41,6 +41,17 @@
                                 </a>
                             </router-link>
                             <router-link
+                                v-if="user"
+                                :to="{name: 'packages'}"
+                                custom
+                                v-slot="{ navigate, href }"
+                            >
+                                <a class="tab" :class="{'tab-active': $route.path.startsWith('/packages')}"
+                                   @click="navigate">
+                                    Пакування
+                                </a>
+                            </router-link>
+                            <router-link
                                 v-if="packer_user"
                                 :to="{name: 'packaging'}"
                                 custom

@@ -14,10 +14,11 @@ class SearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search'       => ['nullable', 'string'],
-            'categories'   => ['nullable', 'array'],
-            'categories.*' => ['integer', Rule::exists(Category::getTableName(), 'id')],
-            'is_available' => ['nullable', 'boolean'],
+            'search'             => ['nullable', 'string'],
+            'categories'         => ['nullable', 'array'],
+            'categories.*'       => ['integer', Rule::exists(Category::getTableName(), 'id')],
+            'is_available'       => ['nullable', 'boolean'],
+            'is_synced_with_crm' => ['nullable', 'boolean'],
         ];
     }
 }

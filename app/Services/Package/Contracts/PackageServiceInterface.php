@@ -3,6 +3,7 @@
 namespace App\Services\Package\Contracts;
 
 use Adobrovolsky97\LaravelRepositoryServicePattern\Services\Contracts\BaseCrudServiceInterface;
+use App\Models\Package\Package;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -26,4 +27,12 @@ interface PackageServiceInterface extends BaseCrudServiceInterface
      * @return Model
      */
     public function deleteProduct(Model $product): Model;
+
+    /**
+     * Send bimpsoft package
+     *
+     * @param Package $package
+     * @return mixed
+     */
+    public function send(Package $package);
 }

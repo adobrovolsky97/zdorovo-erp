@@ -2,10 +2,8 @@
 
 namespace App\Console;
 
-use App\Console\Commands\HandlePullRequestUpdates;
-use App\Console\Commands\ServiceCommands\FetchIssueComments;
-use App\Console\Commands\ServiceCommands\FetchNewIssues;
-use App\Console\Commands\ServiceCommands\FetchOpenPullRequest;
+use App\Console\Commands\FetchProductsFromFeedCommand;
+use App\Console\Commands\SyncProductsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,11 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command(FetchNewIssues::class)->everyTenMinutes();
-        $schedule->command(FetchIssueComments::class)->everyTenMinutes();
-
-        $schedule->command(FetchOpenPullRequest::class)->everyTenMinutes();
-        $schedule->command(HandlePullRequestUpdates::class)->everyTenMinutes();
+        $schedule->call(FetchProductsFromFeedCommand::class)->hourly();
+        $schedule->call(SyncProductsCommand::class)->hourly();
     }
 
     /**
@@ -28,7 +23,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

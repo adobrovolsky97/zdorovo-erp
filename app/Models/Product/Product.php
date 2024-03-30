@@ -19,6 +19,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property integer $id
  * @property integer $category_id
  * @property string $external_id
+ * @property string $bimpsoft_uuid
+ * @property string $barcode
  * @property string $name
  * @property Pack $pack
  * @property boolean $is_available
@@ -37,6 +39,8 @@ class Product extends BaseModel implements HasMedia
         'category_id',
         'external_id',
         'name',
+        'bimpsoft_uuid',
+        'barcode',
         'pack',
         'is_available',
         'created_at',

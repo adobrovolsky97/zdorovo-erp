@@ -28,6 +28,11 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             })
             ->when(!empty($searchParams['categories']), function (Builder $query) use ($searchParams) {
                 return $query->whereIn('category_id', $searchParams['categories']);
+            })
+            ->when(isset($searchParams['is_synced_with_crm']), function (Builder $query) use ($searchParams) {
+                return $searchParams['is_synced_with_crm']
+                    ? $query->whereNotNull('bimpsoft_uuid')
+                    : $query->whereNull('bimpsoft_uuid');
             });
     }
 

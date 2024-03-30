@@ -84,6 +84,8 @@ export default {
             search: '',
             filters: {
                 page: 1,
+                is_synced_with_crm: null,
+                is_available: null,
                 'categories[]': [],
                 search: '',
             },
@@ -176,6 +178,7 @@ export default {
         fetchData() {
             let params = this.getQueryParams();
             params.is_available = 1;
+            params.is_synced_with_crm = 1;
             this.$router.push({query: params});
 
             this.isDataLoaded = false;
