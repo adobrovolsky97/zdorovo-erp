@@ -146,7 +146,7 @@ export default {
                 .then((response) => {
                     this.package = response.data.data;
 
-                    if (this.package.products.length > 0) {
+                    if (this.package?.products?.length > 0) {
                         this.packedProducts = this.package.products.map((product) => {
                             return {
                                 id: product.id,
