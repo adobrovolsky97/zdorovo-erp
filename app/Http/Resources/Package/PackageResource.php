@@ -29,6 +29,8 @@ class PackageResource extends JsonResource
             'status'     => $this->status->title(),
             'order_uuid' => $this->order_uuid,
             'products'   => ProductResource::collection($this->products ?? []),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
         ];
     }
 }

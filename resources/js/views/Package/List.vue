@@ -24,6 +24,7 @@
                             <th>Пакувальник</th>
                             <th>Статус</th>
                             <th>UUID замовлення</th>
+                            <th>Час</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -32,6 +33,7 @@
                             <th>{{ item.packer.name }}</th>
                             <th>{{ item.status }}</th>
                             <th>{{ item.order_uuid }}</th>
+                            <th>{{ item.updated_at }}</th>
                         </tr>
                         </tbody>
                     </table>
