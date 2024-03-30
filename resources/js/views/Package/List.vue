@@ -122,7 +122,7 @@ export default {
 
             this.isDataLoaded = false;
 
-            axios.get('/api/packages', {params: params})
+            axios.get('/api/packages/list', {params: params})
                 .then((response) => {
                     this.data = response.data;
                 })

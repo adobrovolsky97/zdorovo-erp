@@ -60,6 +60,6 @@ Route::group(['middleware' => ['auth:api,packer']], function () {
         Route::delete('products/{product}', [PackageController::class, 'removeProduct']);
 
         Route::post('{package}/send', [PackageController::class, 'send']);
-        Route::get('', [PackageController::class, 'index']);
+        Route::get('list', [PackageController::class, 'index']);
     });
 });
