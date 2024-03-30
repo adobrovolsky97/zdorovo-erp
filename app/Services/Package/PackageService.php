@@ -30,7 +30,7 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
         $package = $this->find(['status' => Status::PENDING->value])->first();
 
         if (empty($package)) {
-            $package = $this->create(['status' => Status::PENDING]);
+            $package = $this->create(['status' => Status::PENDING, 'packer_id' => auth()->guard('packer')->id()]);
         }
 
         $package->products()->syncWithPivotValues($product, ['quantity' => $quantity], false);

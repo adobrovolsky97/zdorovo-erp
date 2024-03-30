@@ -5,6 +5,7 @@ namespace App\Models\Package;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
 use App\Enum\Package\Status;
 use App\Models\Product\Product;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -25,7 +26,8 @@ class Package extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'status'
+        'status',
+        'packer_id',
     ];
 
     /**
@@ -34,6 +36,17 @@ class Package extends BaseModel
     protected $casts = [
         'status' => Status::class
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        if (!Auth::guard('packer')->guest()) {
+            static::addGlobalScope('packer', function ($builder) {
+                $builder->where('packer_id', Auth::guard('packer')->id());
+            });
+        }
+    }
 
     /**
      * @return BelongsToMany

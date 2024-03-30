@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('status')->default(Status::PENDING->value);
+            $table->foreignId('packer_id')->constrained('packers')->cascadeOnDelete();
             $table->timestamps();
         });
 
