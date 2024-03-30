@@ -145,12 +145,15 @@ export default {
             axios.get('/api/packages')
                 .then((response) => {
                     this.package = response.data.data;
-                    this.packedProducts = this.package.products.map((product) => {
-                        return {
-                            id: product.id,
-                            quantity: product.quantity
-                        }
-                    });
+
+                    if (this.package.products.length > 0) {
+                        this.packedProducts = this.package.products.map((product) => {
+                            return {
+                                id: product.id,
+                                quantity: product.quantity
+                            }
+                        });
+                    }
                 });
         },
         /**
