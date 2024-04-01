@@ -65,7 +65,7 @@
                             <th>#</th>
                             <th>Назва</th>
                             <th>Кількість</th>
-                            <th>Дой-Пак</th>
+                            <th>Кастомний Дой-Пак</th>
                             <th>Дії</th>
                         </tr>
                         </thead>
@@ -77,7 +77,7 @@
                                 <input type="text" class="input-bordered input input-sm w-24"
                                        v-model="product.quantity">
                             </th>
-                            <th>{{ product.pack }}</th>
+                            <th>{{ product.custom_pack }}</th>
                             <td class="flex flex-row gap-2">
                                 <button @click="updateProduct(product.id, product.quantity)"
                                         class="btn btn-success btn-sm btn-circle">
@@ -111,12 +111,11 @@
 import Pagination from "../../components/pagination/Pagination.vue";
 import TagInput from "../../components/TagInput/TagInput.vue";
 import TableSkeleton from "../../components/skeleton/TableSkeleton.vue";
-import Item from "../product/PackerItem.vue";
 import {toast} from "vue3-toastify";
 
 export default {
     name: "Package",
-    components: {Item, TableSkeleton, TagInput, Pagination},
+    components: {TableSkeleton, TagInput, Pagination},
     data() {
         return {
             isSendModalShown: false,
@@ -158,7 +157,7 @@ export default {
                 return;
             }
 
-            axios.delete(`/api/packages/products/${this.productToDelete.id}`)
+            axios.delete(`/api/packages/products/${this.productToDelete.pack_id}`)
                 .then((response) => {
                     this.package = response.data.data;
                 })

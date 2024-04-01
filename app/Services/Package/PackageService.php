@@ -5,6 +5,7 @@ namespace App\Services\Package;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Exceptions\Service\ServiceException;
 use App\Enum\Package\Status;
 use App\Models\Package\Package;
+use App\Models\Package\PackageProduct;
 use App\Models\Product\Product;
 use App\Services\Bimpsoft\Contracts\BimpsoftServiceInterface;
 use App\Services\Package\Contracts\PackageServiceInterface;
@@ -24,10 +25,11 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
      *
      * @param Model|Product $product
      * @param int $quantity
+     * @param int|null $pack
      * @return Package
      * @throws ServiceException
      */
-    public function addProduct(Model|Product $product, int $quantity): Package
+    public function addProduct(Model|Product $product, int $quantity, int $pack = null): Package
     {
         if ($quantity <= 0) {
             throw new BadRequestHttpException(__('Quantity must be greater than 0'));
@@ -44,7 +46,10 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
             $package = $this->create(['status' => Status::PENDING, 'packer_id' => auth()->guard('packer')->id()]);
         }
 
-        $package->products()->syncWithPivotValues($product, ['quantity' => $quantity], false);
+        $package->packageProducts()->updateOrCreate(
+            ['product_id' => $product->id, 'pack' => $pack],
+            ['quantity' => $quantity]
+        );
 
         return $package->refresh();
     }
@@ -52,10 +57,10 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
     /**
      * Delete product from package
      *
-     * @param Model $product
+     * @param Model|PackageProduct $product
      * @return Model
      */
-    public function deleteProduct(Model $product): Model
+    public function deleteProduct(Model|PackageProduct $product): Model
     {
         /** @var Package $package */
         $package = $this->find(['status' => Status::PENDING->value])->first();
@@ -64,7 +69,7 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
             throw new BadRequestHttpException('Package not found');
         }
 
-        $package->products()->detach($product);
+        $package->packageProducts()->whereKey($product->id)->delete();
 
         return $package->refresh();
     }
@@ -85,19 +90,27 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
 
         DB::transaction(function () use ($package, $bimpsoftService) {
 
-            $productsData = $package->products
-                ->map(function (Product $product) {
-                    return [
-                        'nomenclatureUuid'   => $product->bimpsoft_uuid,
-                        'percentageDiscount' => 0,
-                        'reserve'            => 0,
-                        'count'              => $product->pivot->quantity,
-                        'cost'               => 1,
-                    ];
-                })
-                ->toArray();
+            $comments = [];
+            $productsData = [];
 
-            $orderUuid = $bimpsoftService->sendOrder($productsData);
+            foreach ($package->packageProducts as $packageProduct) {
+                $productsData[$packageProduct->product_id] = [
+                    'nomenclatureUuid'   => $packageProduct->product->bimpsoft_uuid,
+                    'percentageDiscount' => 0,
+                    'reserve'            => 0,
+                    'count'              => $packageProduct->quantity + ($productsData[$packageProduct->product_id]['count'] ?? 0),
+                    'cost'               => 1,
+                ];
+
+                if ($packageProduct->pack) {
+                    $comments[] = "$packageProduct->quantity уп. товару '{$packageProduct->product->name}' було розфасовано у  {$packageProduct->pack->value} Дой-Пак.";
+                }
+            }
+
+            $orderUuid = $bimpsoftService->sendOrder([
+                'stocks'  => array_values($productsData),
+                'comment' => !empty($comments) ? implode(PHP_EOL, $comments) : null
+            ]);
 
             $package->update(['status' => Status::SENT, 'order_uuid' => $orderUuid]);
         });

@@ -21,7 +21,7 @@ class PackageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->id ?? null,
+            'id'         => $this->id,
             'packer'     => [
                 'id'   => $this->packer?->id,
                 'name' => $this->packer?->name,

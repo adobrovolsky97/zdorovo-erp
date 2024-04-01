@@ -15,6 +15,7 @@ import List from "./views/packers/List.vue";
 import Packaging from "./views/packer/Packaging.vue";
 import Package from "./views/packer/Package.vue";
 import PackagesList from "./views/Package/List.vue";
+import NotFound from "./views/errors/NotFound.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -94,6 +95,10 @@ const router = createRouter({
                     }
                 }
             ]
+        },
+        {
+            path: "/:catchAll(.*)",
+            component: NotFound,
         },
     ],
 });

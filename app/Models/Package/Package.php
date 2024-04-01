@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Package
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Carbon $updated_at
  *
  * @property Product[]|Collection $products
+ * @property PackageProduct[]|Collection $packageProducts
  */
 class Package extends BaseModel
 {
@@ -68,6 +70,14 @@ class Package extends BaseModel
     {
         return $this
             ->belongsToMany(Product::class, 'package_products', 'package_id', 'product_id')
-            ->withPivot('quantity');
+            ->withPivot('quantity', 'pack', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function packageProducts(): HasMany
+    {
+        return $this->hasMany(PackageProduct::class, 'package_id');
     }
 }

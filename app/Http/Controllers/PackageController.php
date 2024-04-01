@@ -6,11 +6,13 @@ use App\Enum\Package\Status;
 use App\Http\Requests\Package\AddProductRequest;
 use App\Http\Resources\Package\PackageResource;
 use App\Models\Package\Package;
+use App\Models\Package\PackageProduct;
 use App\Models\Product\Product;
 use App\Services\Package\Contracts\PackageServiceInterface;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Response;
 
 /**
  * Class PackageController
@@ -41,11 +43,15 @@ class PackageController extends Controller
     /**
      * Get package
      *
-     * @return PackageResource
+     * @return PackageResource|JsonResponse
      */
-    public function getPackage(): PackageResource
+    public function getPackage(): PackageResource|JsonResponse
     {
-        return PackageResource::make($this->packageService->find(['status' => Status::PENDING->value])->first());
+        if ($package = $this->packageService->find(['status' => Status::PENDING->value])->first()) {
+            return PackageResource::make($package);
+        }
+
+        return Response::json(null);
     }
 
     /**
@@ -57,16 +63,20 @@ class PackageController extends Controller
      */
     public function addProduct(Product $product, AddProductRequest $request): PackageResource
     {
-        return PackageResource::make($this->packageService->addProduct($product, $request->input('quantity')));
+        return PackageResource::make($this->packageService->addProduct(
+            $product,
+            $request->input('quantity'),
+            $request->input('pack')
+        ));
     }
 
     /**
      * Delete product from package
      *
-     * @param Product $product
+     * @param PackageProduct $product
      * @return PackageResource
      */
-    public function removeProduct(Product $product): PackageResource
+    public function removeProduct(PackageProduct $product): PackageResource
     {
         return PackageResource::make($this->packageService->deleteProduct($product));
     }
@@ -85,6 +95,6 @@ class PackageController extends Controller
 
         $this->packageService->send($package);
 
-        return response()->json(null, 204);
+        return Response::json(null, 204);
     }
 }

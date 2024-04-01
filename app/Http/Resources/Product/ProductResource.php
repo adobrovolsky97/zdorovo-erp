@@ -37,6 +37,8 @@ class ProductResource extends JsonResource
 
         if (Auth::user() instanceof Packer) {
             $data['quantity'] = $this->pivot?->quantity;
+            $data['custom_pack'] = $this->pivot?->pack;
+            $data['pack_id'] = $this->pivot?->id;
         }
 
         return $data;

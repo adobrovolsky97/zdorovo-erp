@@ -18,7 +18,7 @@
                 </svg>
 
             </button>
-            <div class="card-body items-center text-center">
+            <div class="card-body items-center text-center flex flex-col justify-between">
                 <h2 class="text-md font-bold">{{ product.name }}</h2>
                 <div class="card-actions w-full flex flex-col gap-2" v-if="isEditMode">
                     <div class="flex flex-col w-full justify-start items-start">

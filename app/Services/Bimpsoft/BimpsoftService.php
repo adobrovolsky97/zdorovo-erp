@@ -68,6 +68,10 @@ class BimpsoftService implements BimpsoftServiceInterface
      */
     public function sendOrder(array $data): string
     {
+        if(empty($data['stocks'])) {
+            throw new Exception('Products not found');
+        }
+
         $this->getTokenIfNotSet();
 
         $payload = [
@@ -81,9 +85,9 @@ class BimpsoftService implements BimpsoftServiceInterface
             'statusUuid'         => config('bimpsoft.status_uuid'),
             'addVAT'             => false,
             'setUpByContract'    => false,
-            'stocks'             => $data
         ];
 
+        $payload = array_merge($payload, $data);
 
         $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/invoiceForCustomerPayment/api-insert', $payload);
         $response->throwIf(!($response->json('success') ?? false));

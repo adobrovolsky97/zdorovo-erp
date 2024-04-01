@@ -16,7 +16,7 @@
     "src": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-ext-400-normal.woff2"
   },
   "resources/js/app.css": {
-    "file": "assets/app-884a48e0.css",
+    "file": "assets/app-12b393c8.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
@@ -27,9 +27,9 @@
       "assets/dm-mono-latin-400-normal-f8592521.woff"
     ],
     "css": [
-      "assets/app-884a48e0.css"
+      "assets/app-12b393c8.css"
     ],
-    "file": "assets/app-dd87e766.js",
+    "file": "assets/app-5d8a3b63.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }
