@@ -21,7 +21,7 @@
 
                 <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
                     <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div class="card w-96 bg-neutral text-neutral-content">
+                        <div class="card w-96 bg-base-100">
                             <div class="card-body items-center text-center border rounded-lg">
                                 <h2 class="card-title mb-2">Чи підтверджуєте Ви видалення?</h2>
                                 <div class="card-actions justify-end">
@@ -40,7 +40,7 @@
 
                 <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
                     <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div class="card w-96 bg-neutral text-neutral-content">
+                        <div class="card w-96 bg-base-100">
                             <div class="card-body items-center text-center border rounded-lg">
                                 <h2 class="card-title mb-2">Чи підтверджуєте Ви відправку замовлення у Bimpsoft?</h2>
                                 <div class="card-actions justify-end">
