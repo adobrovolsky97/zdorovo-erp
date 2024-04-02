@@ -39,6 +39,14 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
             throw new BadRequestHttpException(__('Product is not available for packaging'));
         }
 
+        if (empty($product->pack)) {
+            if (empty($pack)) {
+                throw new BadRequestHttpException(__('Product pack is required'));
+            }
+
+            $product->update(['pack' => $pack]);
+        }
+
         /** @var Package $package */
         $package = $this->find(['status' => Status::PENDING->value])->first();
 
@@ -47,7 +55,7 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
         }
 
         $package->packageProducts()->updateOrCreate(
-            ['product_id' => $product->id, 'pack' => $pack],
+            ['product_id' => $product->id, 'pack' => $pack ?? $product->pack],
             ['quantity' => $quantity]
         );
 
@@ -102,7 +110,7 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
                     'cost'               => 1,
                 ];
 
-                if ($packageProduct->pack) {
+                if ($packageProduct->pack !== $packageProduct->product->pack) {
                     $comments[] = "$packageProduct->quantity уп. товару '{$packageProduct->product->name}' було розфасовано у  {$packageProduct->pack->value} Дой-Пак.";
                 }
             }

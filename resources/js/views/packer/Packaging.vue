@@ -46,15 +46,17 @@
 
                 <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
                     <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div class="card bg-neutral text-neutral-content" style="width: 500px">
-                            <div class="card-body items-center text-center border rounded-lg">
+                        <div class="card bg-base-100" style="width: 500px">
+                            <div class="card-body text-center border rounded-lg">
                                 <h2 class="card-title mb-2">Налаштування упакування</h2>
-                                <div class="card-content">
+                                <div class="card-content items-center">
                                     <p class="mb-4">Товар '{{ form.product.name }}'</p>
                                     <div v-if="form.product.is_synced_with_crm"
                                          class="flex flex-col gap-2 justify-center items-center">
                                         <div class="flex flex-col w-full justify-start items-start">
                                             <p class="text-sm">Дой-Пак</p>
+                                            <p class="text-sm text-warning mb-1" v-if="!form.product.pack">У продукта не
+                                                обраний Дой-Пак. Оберіть вручну</p>
                                             <select v-model="form.pack" class="select select-bordered w-full">
                                                 <option :value="null">Дой-Пак не обрано</option>
                                                 <option :value="pack" v-for="pack in packValues" :key="pack">
@@ -64,16 +66,16 @@
                                         </div>
                                         <div class="flex mt-4 flex-row w-full justify-center gap-2 items-start">
                                             <button @click="decrement"
-                                                    class="btn w-12 btn-success btn-outline">-
+                                                    class="btn w-12 btn-success">-
                                             </button>
-                                            <input type="text" v-model="form.qty" class="input input-bordered w-48">
+                                            <input type="text" v-model="form.qty" class="input input-bordered w-full">
                                             <button @click="increment"
-                                                    class="btn w-12 btn-success btn-outline">+
+                                                    class="btn w-12 btn-success">+
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-actions justify-end mt-4">
+                                <div class="flex flex-row justify-end mt-4 gap-2">
                                     <button @click="addProduct" class="btn btn-success">Запакувати</button>
                                     <button @click="hideAddModal" class="btn btn-outline">Закрити</button>
                                 </div>
@@ -95,23 +97,31 @@
                         <figure class="pt-10">
                             <img :src="product.image" alt="image" style="width: 200px; height: 170px;"/>
                         </figure>
-                        <div class="card-body items-center text-center">
-                            <h2 class="text-md font-bold">{{ product.name }}</h2>
+                        <div class="card-body items-center text-center flex flex-col justify-between">
+                           <div>
+                               <h2 class="text-md font-bold">{{ product.name }}</h2>
+                               <div class="flex flex-row items-center justify-center gap-2">
+                                   <span class="font-bold">Категорія:</span> {{
+                                       product.category?.name ?? 'Не вказана'
+                                   }}
+                               </div>
+                           </div>
                             <div class="flex flex-col gap-2 w-full">
-                                <div class="flex flex-row items-center justify-center gap-2">
-                                    <span class="font-bold">Категорія:</span> {{
-                                        product.category?.name ?? 'Не вказана'
-                                    }}
-                                </div>
-                                <div class="flex flex-row items-center justify-center gap-2">
-                                    <span class="font-bold">Дой-Пак:</span> {{ product.pack ?? 'Не вказано' }}
+                                <div class="badge badge-warning absolute right-3 top-3">
+                                    Дой-Пак: {{ product.pack ?? getPackedProduct(product.id)?.pack ?? 'Не вказано' }}
                                 </div>
                                 <div class="flex flex-row items-center justify-center gap-2">
                                 </div>
-                                <div class="border rounded-lg p-2" v-if="getPackedProductsForCurrentProduct(product).length > 0">
+                                <div class="border rounded-lg p-2"
+                                     v-if="getPackedProductsForCurrentProduct(product).length > 0">
                                     Запаковано:
-                                    <div v-for="packedProduct in getPackedProductsForCurrentProduct(product)" :key="product.id">
-                                        <p>{{packedProduct.custom_pack ? packedProduct.custom_pack + ' Дой-Пак' :  'Стандартний Дой-Пак'}} -  {{packedProduct.quantity}} уп.</p>
+                                    <div v-for="packedProduct in getPackedProductsForCurrentProduct(product)"
+                                         :key="product.id">
+                                        <p>
+                                            {{
+                                                packedProduct.custom_pack ? packedProduct.custom_pack + ' Дой-Пак' : 'Стандартний Дой-Пак'
+                                            }}
+                                            - {{ packedProduct.quantity }} уп.</p>
                                     </div>
                                 </div>
 
@@ -231,6 +241,15 @@ export default {
                     "type": "error",
                 })
                 this.form.qty = 1;
+                return;
+            }
+
+            if (!this.form.product.pack && !this.getPackedProduct(this.form.product.id)?.pack && !this.form.pack) {
+                toast("Оберіть Дой-Пак", {
+                    "position": "bottom-right",
+                    "theme": this.$store.state.theme,
+                    "type": "error",
+                })
                 return;
             }
 

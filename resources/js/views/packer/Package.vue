@@ -44,7 +44,9 @@
                             <div class="card-body items-center text-center border rounded-lg">
                                 <h2 class="card-title mb-2">Чи підтверджуєте Ви відправку замовлення у Bimpsoft?</h2>
                                 <div class="card-actions justify-end">
-                                    <button @click="sendToCrm" class="btn btn-success">Так</button>
+                                    <button :disabled="isButtonDisabled" @click="sendToCrm" class="btn btn-success">
+                                        Так
+                                    </button>
                                     <button @click="isSendModalShown = false" class="btn btn-outline">Ні</button>
                                 </div>
                             </div>
@@ -118,6 +120,7 @@ export default {
     components: {TableSkeleton, TagInput, Pagination},
     data() {
         return {
+            isButtonDisabled: false,
             isSendModalShown: false,
             productToDelete: null,
             package: [],
@@ -170,6 +173,7 @@ export default {
                 });
         },
         sendToCrm() {
+            this.isButtonDisabled = true;
             axios.post('/api/packages/' + this.package.id + '/send')
                 .then(() => {
                     this.isSendModalShown = false;
@@ -183,6 +187,9 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
+                .finally(() => {
+                    this.isButtonDisabled = false;
+                });
         },
         updateProduct(id, qty) {
             if (qty < 1) {

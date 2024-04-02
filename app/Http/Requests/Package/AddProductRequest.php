@@ -18,7 +18,11 @@ class AddProductRequest extends FormRequest
     {
         return [
             'quantity' => ['required', 'integer', 'min:1'],
-            'pack'     => ['nullable', 'integer', Rule::enum(Pack::class)],
+            'pack'     => [
+                empty($this->route('product')?->pack) ? 'required' : 'nullable',
+                'integer',
+                Rule::enum(Pack::class)
+            ],
         ];
     }
 }
