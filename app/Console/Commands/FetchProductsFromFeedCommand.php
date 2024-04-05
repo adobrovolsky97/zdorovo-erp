@@ -112,7 +112,7 @@ class FetchProductsFromFeedCommand extends Command
                 'deleted_at'   => null,
             ]);
 
-            if (!$existingProduct->hasMedia('image') && Str::startsWith($imageUrl, ['http', 'https'])) {
+            if (!$existingProduct->hasMedia('image') && !empty($imageUrl) && Str::startsWith($imageUrl, ['http', 'https'])) {
                 $this->warn("Product with external id $id has no image");
                 $existingProduct->addMediaFromUrl($imageUrl)->toMediaCollection('image');
             }
