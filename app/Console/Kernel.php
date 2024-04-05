@@ -14,8 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command(FetchProductsFromFeedCommand::class)->everyMinute()->withoutOverlapping();
-        $schedule->command(SyncProductsCommand::class)->everyMinute()->withoutOverlapping();
+        $schedule->command(FetchProductsFromFeedCommand::class)->everyTenMinutes()->withoutOverlapping();
+        $schedule->command(SyncProductsCommand::class)->everyTenMinutes()->withoutOverlapping();
         $schedule->command('telescope:prune')->weekly();
     }
 
