@@ -20,6 +20,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property integer $category_id
  * @property integer $leftover
  * @property string $external_id
+ * @property float $price
  * @property string $bimpsoft_uuid
  * @property string $barcode
  * @property string $name
@@ -40,6 +41,7 @@ class Product extends BaseModel implements HasMedia
         'category_id',
         'external_id',
         'name',
+        'price',
         'bimpsoft_uuid',
         'barcode',
         'pack',

@@ -37,8 +37,8 @@
                         <p class="text-sm">Дой-Пак</p>
                         <select v-model="localProduct.pack" class="select select-sm select-bordered w-full">
                             <option :value="null">Дой-Пак не обрано</option>
-                            <option :value="pack" v-for="pack in packValues" :key="pack">
-                                {{ pack }}
+                            <option :value="pack.id" v-for="pack in packValues" :key="pack.id">
+                                {{ pack.name }}
                             </option>
                         </select>
                     </div>
@@ -85,7 +85,26 @@ export default {
             localProduct: this.product,
             isEditMode: false,
             packValues: [
-                150, 250, 500, 1000
+                {
+                    id: '150',
+                    name: '150'
+                },
+                {
+                    id: '250',
+                    name: '250'
+                },
+                {
+                    id: '500',
+                    name: '500'
+                },
+                {
+                    id: '1000',
+                    name: '1000'
+                },
+                {
+                    id: 'bag',
+                    name: 'Паперовий Мішок'
+                }
             ]
         }
     },

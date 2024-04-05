@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enum\Package\Status;
+use App\Enum\Product\Pack;
 use App\Http\Requests\Package\AddProductRequest;
 use App\Http\Resources\Package\PackageResource;
 use App\Models\Package\Package;
@@ -66,7 +67,7 @@ class PackageController extends Controller
         return PackageResource::make($this->packageService->addProduct(
             $product,
             $request->input('quantity'),
-            $request->input('pack')
+            Pack::tryFrom($request->input('pack'))
         ));
     }
 

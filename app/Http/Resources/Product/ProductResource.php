@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Enum\Product\Pack;
 use App\Models\Packer\Packer;
 use App\Models\Product\Product;
 use Auth;
@@ -25,7 +26,7 @@ class ProductResource extends JsonResource
             'id'                 => $this->id,
             'external_id'        => $this->external_id,
             'name'               => $this->name,
-            'pack'               => $this->pack,
+            'pack'               => $this->pack?->title(),
             'leftover'           => $this->leftover,
             'category'           => [
                 'id'   => $this->category?->id,
@@ -38,7 +39,7 @@ class ProductResource extends JsonResource
 
         if (Auth::user() instanceof Packer) {
             $data['quantity'] = $this->pivot?->quantity;
-            $data['custom_pack'] = $this->pivot?->pack;
+            $data['custom_pack'] = Pack::tryFrom($this->pivot?->pack)?->title();
             $data['pack_id'] = $this->pivot?->id;
         }
 

@@ -4,6 +4,7 @@ namespace App\Services\Package;
 
 use Adobrovolsky97\LaravelRepositoryServicePattern\Exceptions\Service\ServiceException;
 use App\Enum\Package\Status;
+use App\Enum\Product\Pack;
 use App\Models\Package\Package;
 use App\Models\Package\PackageProduct;
 use App\Models\Product\Product;
@@ -25,11 +26,11 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
      *
      * @param Model|Product $product
      * @param int $quantity
-     * @param int|null $pack
+     * @param Pack|null $pack
      * @return Package
      * @throws ServiceException
      */
-    public function addProduct(Model|Product $product, int $quantity, int $pack = null): Package
+    public function addProduct(Model|Product $product, int $quantity, Pack $pack = null): Package
     {
         if ($quantity <= 0) {
             throw new BadRequestHttpException(__('Quantity must be greater than 0'));
@@ -107,11 +108,11 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
                     'percentageDiscount' => 0,
                     'reserve'            => 0,
                     'count'              => $packageProduct->quantity + ($productsData[$packageProduct->product_id]['count'] ?? 0),
-                    'cost'               => 1,
+                    'cost'               => $packageProduct->product->price ?? 1,
                 ];
 
                 if ($packageProduct->pack !== $packageProduct->product->pack) {
-                    $comments[] = "$packageProduct->quantity уп. товару '{$packageProduct->product->name}' було розфасовано у  {$packageProduct->pack->value} Дой-Пак.";
+                    $comments[] = "$packageProduct->quantity шт. товару '{$packageProduct->product->name}' було розфасовано у наступне упакування: {$packageProduct->pack->value}.";
                 }
             }
 

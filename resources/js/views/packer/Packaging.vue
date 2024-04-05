@@ -59,8 +59,8 @@
                                                 обраний Дой-Пак. Оберіть вручну</p>
                                             <select v-model="form.pack" class="select select-bordered w-full">
                                                 <option :value="null">Дой-Пак не обрано</option>
-                                                <option :value="pack" v-for="pack in packValues" :key="pack">
-                                                    {{ pack }}
+                                                <option :value="pack.id" v-for="pack in packValues" :key="pack.id">
+                                                    {{ pack.name }}
                                                 </option>
                                             </select>
                                         </div>
@@ -122,9 +122,9 @@
                                          :key="product.id">
                                         <p>
                                             {{
-                                                packedProduct.custom_pack ? packedProduct.custom_pack + ' Дой-Пак' : 'Стандартний Дой-Пак'
+                                                packedProduct.custom_pack ?? packedProduct.pack
                                             }}
-                                            - {{ packedProduct.quantity }} уп.</p>
+                                            - {{ packedProduct.quantity }} шт.</p>
                                     </div>
                                 </div>
 
@@ -165,7 +165,26 @@ export default {
     data() {
         return {
             packValues: [
-                150, 250, 500, 1000
+                {
+                    id: '150',
+                    name: '150'
+                },
+                {
+                    id: '250',
+                    name: '250'
+                },
+                {
+                    id: '500',
+                    name: '500'
+                },
+                {
+                    id: '1000',
+                    name: '1000'
+                },
+                {
+                    id: 'bag',
+                    name: 'Паперовий Мішок'
+                }
             ],
             timer: null,
             isModalShown: false,

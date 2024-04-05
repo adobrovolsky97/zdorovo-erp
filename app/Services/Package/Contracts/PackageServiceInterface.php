@@ -3,6 +3,7 @@
 namespace App\Services\Package\Contracts;
 
 use Adobrovolsky97\LaravelRepositoryServicePattern\Services\Contracts\BaseCrudServiceInterface;
+use App\Enum\Product\Pack;
 use App\Models\Package\Package;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,10 +17,10 @@ interface PackageServiceInterface extends BaseCrudServiceInterface
      *
      * @param Model $product
      * @param int $quantity
-     * @param int|null $pack
+     * @param Pack|null $pack
      * @return Model
      */
-    public function addProduct(Model $product, int $quantity, int $pack = null): Model;
+    public function addProduct(Model $product, int $quantity, Pack $pack = null): Model;
 
     /**
      * Delete product from package

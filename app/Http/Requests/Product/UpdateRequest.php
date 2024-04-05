@@ -16,7 +16,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'category_id'  => ['nullable', 'integer', Rule::exists(Category::getTableName(), 'id')],
-            'pack'         => ['nullable', 'integer', Rule::enum(Pack::class)],
+            'pack'         => ['nullable', 'string', Rule::enum(Pack::class)],
             'is_available' => ['nullable', 'boolean'],
         ];
     }
