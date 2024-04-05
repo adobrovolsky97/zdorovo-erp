@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PackerController;
 use App\Http\Controllers\ProductController;
@@ -61,5 +62,13 @@ Route::group(['middleware' => ['auth:api,packer']], function () {
 
         Route::post('{package}/send', [PackageController::class, 'send']);
         Route::get('list', [PackageController::class, 'index']);
+    });
+
+    /**
+     * Notifications
+     */
+    Route::group(['prefix' => 'notifications'], function () {
+        Route::get('', [NotificationController::class, 'index']);
+        Route::post('read-all', [NotificationController::class, 'readAll']);
     });
 });

@@ -3,15 +3,17 @@
 namespace App\Console\Commands;
 
 use App\Models\Product\Product;
+use App\Services\Notification\Contracts\NotificationServiceInterface;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
+use Str;
 use Throwable;
 
 class FetchProductsFromFeedCommand extends Command
 {
-    private const FEED_URL = 'https://zdorovoshop.salesdrive.me/export/yml/export.yml?publicKey=-TaomzP0Lqv9n4terdPMrk1-ISHXnYJaOPCY81aMgrRZ164Yv13WJX6srZuu8fM9nl8ULo4CD4lREQzs';
+    private const FEED_URL = 'https://zdorovoshop.salesdrive.me/export/yml/export.yml?publicKey=sLNSoBYfOM0CQquBuyJoLvFzc1gUgiRxKP3x1QVzg4xmmCkP4WYckxpHiO4GsoaPn5zFpYt33Nt';
 
     /**
      * The name and signature of the console command.
@@ -49,9 +51,10 @@ class FetchProductsFromFeedCommand extends Command
     /**
      * Execute the console command.
      *
+     * @param NotificationServiceInterface $notificationService
      * @return void
      */
-    public function handle(): void
+    public function handle(NotificationServiceInterface $notificationService): void
     {
         $data = Http::get(self::FEED_URL)->body();
         $xml = simplexml_load_string($data);
@@ -60,6 +63,10 @@ class FetchProductsFromFeedCommand extends Command
             try {
                 $this->processProduct($product);
             } catch (Throwable $e) {
+                $name = $product->name->__toString();
+                $notificationService->create([
+                    'body' => "Стала помилка при обробці продукту $name: {$e->getMessage()}"
+                ]);
                 $this->error($e->getMessage());
             }
         }
@@ -105,7 +112,7 @@ class FetchProductsFromFeedCommand extends Command
                 'deleted_at'   => null,
             ]);
 
-            if (!$existingProduct->hasMedia('image')) {
+            if (!$existingProduct->hasMedia('image') && Str::startsWith($imageUrl, ['http', 'https'])) {
                 $this->warn("Product with external id $id has no image");
                 $existingProduct->addMediaFromUrl($imageUrl)->toMediaCollection('image');
             }

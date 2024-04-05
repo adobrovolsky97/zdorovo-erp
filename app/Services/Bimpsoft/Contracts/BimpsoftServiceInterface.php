@@ -2,6 +2,8 @@
 
 namespace App\Services\Bimpsoft\Contracts;
 
+use Illuminate\Http\Client\RequestException;
+
 interface BimpsoftServiceInterface
 {
     /**
@@ -19,4 +21,13 @@ interface BimpsoftServiceInterface
      * @return string
      */
     public function sendOrder(array $data): string;
+
+    /**
+     * Get leftovers
+     *
+     * @param array $uuids
+     * @return mixed
+     * @throws RequestException
+     */
+    public function getLeftovers(array $uuids): array;
 }

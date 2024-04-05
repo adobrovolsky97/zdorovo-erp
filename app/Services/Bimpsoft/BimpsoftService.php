@@ -59,6 +59,35 @@ class BimpsoftService implements BimpsoftServiceInterface
     }
 
     /**
+     * Get leftovers
+     *
+     * @param array $uuids
+     * @param int $page
+     * @return mixed
+     * @throws RequestException
+     */
+    public function getLeftovers(array $uuids): array
+    {
+        $this->getTokenIfNotSet();
+        $limit = count($uuids);
+
+        $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/nomenclature/api-readLeftovers', [
+            'warehouseUuid' => config('bimpsoft.warehouse_uuid'),
+            'nomenclatureUuids' => $uuids,
+            'periodable' => null,
+            'pagination' => [
+                'count'  => $limit,
+                'offset' => 0
+            ]
+        ]);
+
+        $response->throwIfServerError();
+        $response->throwIf(!($response->json('success') ?? false));
+
+        return $response->json('data') ?? [];
+    }
+
+    /**
      * Send order to bimpsoft
      *
      * @param array $data
@@ -68,7 +97,7 @@ class BimpsoftService implements BimpsoftServiceInterface
      */
     public function sendOrder(array $data): string
     {
-        if(empty($data['stocks'])) {
+        if (empty($data['stocks'])) {
             throw new Exception('Products not found');
         }
 

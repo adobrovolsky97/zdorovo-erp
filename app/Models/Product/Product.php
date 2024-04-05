@@ -18,6 +18,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @property integer $id
  * @property integer $category_id
+ * @property integer $leftover
  * @property string $external_id
  * @property string $bimpsoft_uuid
  * @property string $barcode
@@ -43,6 +44,7 @@ class Product extends BaseModel implements HasMedia
         'barcode',
         'pack',
         'is_available',
+        'leftover',
         'created_at',
         'updated_at'
     ];

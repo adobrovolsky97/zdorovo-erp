@@ -5,7 +5,10 @@
         v-slot="{ navigate }"
     >
         <div class="card bg-base-100 shadow-xl border">
-            <div v-if="product.is_synced_with_crm" class="badge badge-success absolute left-2 top-2">Синхронізано з Bimpsoft</div>
+            <div v-if="product.is_synced_with_crm" class="badge badge-success absolute left-3 top-3">Синхронізано з Bimpsoft</div>
+            <div class="badge badge-neutral absolute left-3 top-10" v-if="product.leftover !== null">
+                Залишок: {{ product.leftover}}
+            </div>
 
             <figure class="pt-10">
                 <img :src="product.image" alt="image" style="width: 200px; height: 170px;"/>

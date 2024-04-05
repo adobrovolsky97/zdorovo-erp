@@ -107,6 +107,9 @@
                                </div>
                            </div>
                             <div class="flex flex-col gap-2 w-full">
+                                <div class="badge badge-neutral absolute left-3 top-3" v-if="product.leftover !== null">
+                                    Залишок: {{ product.leftover}}
+                                </div>
                                 <div class="badge badge-warning absolute right-3 top-3">
                                     Дой-Пак: {{ product.pack ?? getPackedProduct(product.id)?.pack ?? 'Не вказано' }}
                                 </div>

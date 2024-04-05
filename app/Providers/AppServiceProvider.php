@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Notification\Contracts\NotificationRepositoryInterface;
+use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Package\Contracts\PackageRepositoryInterface;
 use App\Repositories\Package\PackageRepository;
 use App\Repositories\Packer\Contracts\PackerRepositoryInterface;
@@ -14,6 +16,8 @@ use App\Services\Bimpsoft\BimpsoftService;
 use App\Services\Bimpsoft\Contracts\BimpsoftServiceInterface;
 use App\Services\Category\CategoryService;
 use App\Services\Category\Contracts\CategoryServiceInterface;
+use App\Services\Notification\Contracts\NotificationServiceInterface;
+use App\Services\Notification\NotificationService;
 use App\Services\Package\Contracts\PackageServiceInterface;
 use App\Services\Package\PackageService;
 use App\Services\Packer\Contracts\PackerServiceInterface;
@@ -37,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PackerServiceInterface::class, PackerService::class);
         $this->app->singleton(PackageServiceInterface::class, PackageService::class);
         $this->app->singleton(BimpsoftServiceInterface::class, BimpsoftService::class);
+        $this->app->singleton(NotificationServiceInterface::class, NotificationService::class);
 
         /*
          * Repositories
@@ -45,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->singleton(PackerRepositoryInterface::class, PackerRepository::class);
         $this->app->singleton(PackageRepositoryInterface::class, PackageRepository::class);
+        $this->app->singleton(NotificationRepositoryInterface::class, NotificationRepository::class);
     }
 
     /**

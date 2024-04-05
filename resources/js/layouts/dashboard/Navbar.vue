@@ -79,8 +79,9 @@
             </div>
         </div>
         <div class="flex-none gap-2">
-            <label class="swap swap-rotate">
+            <Notifcation v-if="user"/>
 
+            <label class="swap swap-rotate">
                 <!-- this hidden checkbox controls the state -->
                 <input type="checkbox" class="theme-controller" @change="swapTheme" :checked="theme === lightTheme"/>
 
@@ -120,6 +121,7 @@ import Auth from "../../api/Auth/Auth.js";
 import {computed} from "vue";
 import store from "../../store.js";
 import {DARK_THEME, LIGHT_THEME} from "../../env.js";
+import Notifcation from "../../components/notification/Notifcation.vue";
 
 export default {
     data() {
@@ -130,6 +132,7 @@ export default {
             lightTheme: LIGHT_THEME,
         }
     },
+    components: {Notifcation},
     methods: {
         logout() {
             Auth.logout()
