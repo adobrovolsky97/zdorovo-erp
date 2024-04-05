@@ -67,7 +67,7 @@ class FetchProductsFromFeedCommand extends Command
                 $notificationService->create([
                     'body' => "Стала помилка при обробці продукту $name: {$e->getMessage()}"
                 ]);
-                $this->error($e->getMessage());
+                $this->error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             }
         }
 
