@@ -108,7 +108,7 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
                     'percentageDiscount' => 0,
                     'reserve'            => 0,
                     'count'              => $packageProduct->quantity + ($productsData[$packageProduct->product_id]['count'] ?? 0),
-                    'cost'               => $packageProduct->product->price ?? 1,
+                    'cost'               => $packageProduct->product->price > 0 ? $packageProduct->product->price : 1
                 ];
 
                 if ($packageProduct->pack !== $packageProduct->product->pack) {
