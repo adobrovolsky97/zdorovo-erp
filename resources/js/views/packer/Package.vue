@@ -185,7 +185,11 @@ export default {
                     this.package = null;
                 })
                 .catch(error => {
-                    console.log(error);
+                    toast('Сталась помилка при відправці у Bimpsoft', {
+                        "position": "bottom-right",
+                        "theme": this.$store.state.theme,
+                        "type": "error",
+                    })
                 })
                 .finally(() => {
                     this.isButtonDisabled = false;
@@ -216,7 +220,6 @@ export default {
                         "theme": this.$store.state.theme,
                         "type": "error",
                     })
-                    console.log(error);
                 })
         }
     },
