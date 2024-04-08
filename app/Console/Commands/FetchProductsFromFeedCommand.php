@@ -108,7 +108,6 @@ class FetchProductsFromFeedCommand extends Command
             $existingProduct->update([
                 'name'         => $product->name->__toString(),
                 'barcode'      => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
-                'is_available' => $isAvailable,
                 'price'        => $product->price->__toString(),
                 'deleted_at'   => null,
             ]);
