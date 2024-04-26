@@ -12,4 +12,5 @@ return [
     'warehouse_uuid' => env('BIMPSOFT_WAREHOUSE_UUID'),
     'customer_uuid' => env('BIMPSOFT_CUSTOMER_UUID'),
     'status_uuid' => env('BIMPSOFT_STATUS_UUID'),
+    'package_mails' => env('BIMPSOFT_PACKAGE_MAILS', 'info@zdorovoshop.com,buh@zdorovoshop.com'),
 ];

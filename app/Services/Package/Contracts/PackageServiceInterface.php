@@ -34,7 +34,7 @@ interface PackageServiceInterface extends BaseCrudServiceInterface
      * Send bimpsoft package
      *
      * @param Package $package
-     * @return mixed
+     * @return void
      */
-    public function send(Package $package);
+    public function send(Package $package): void;
 }

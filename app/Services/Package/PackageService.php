@@ -5,6 +5,7 @@ namespace App\Services\Package;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Exceptions\Service\ServiceException;
 use App\Enum\Package\Status;
 use App\Enum\Product\Pack;
+use App\Jobs\SendXlsFileToManagerJob;
 use App\Models\Package\Package;
 use App\Models\Package\PackageProduct;
 use App\Models\Product\Product;
@@ -122,6 +123,8 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
             ]);
 
             $package->update(['status' => Status::SENT, 'order_uuid' => $orderUuid]);
+
+            SendXlsFileToManagerJob::dispatch($package);
         });
     }
 
