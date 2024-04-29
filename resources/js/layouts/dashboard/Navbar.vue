@@ -73,6 +73,17 @@
                                     Запаковано
                                 </a>
                             </router-link>
+                            <router-link
+                                v-if="packer_user"
+                                :to="{name: 'leftovers'}"
+                                custom
+                                v-slot="{ navigate, href }"
+                            >
+                                <a class="tab" :class="{'tab-active': $route.path.startsWith('/leftovers')}"
+                                   @click="navigate">
+                                    Залишки
+                                </a>
+                            </router-link>
                         </div>
                     </div>
                 </div>

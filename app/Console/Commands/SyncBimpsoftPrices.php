@@ -37,6 +37,7 @@ class SyncBimpsoftPrices extends Command
 
 
         foreach ($bimpsoftService->getPrices()['rows'] as $productPrice) {
+            dd($productPrice);
 
             /** @var Product $productToUpdate */
             if(!empty($productToUpdate = $productsToSync->where('bimpsoft_uuid', $productPrice['GUID'])->first())) {

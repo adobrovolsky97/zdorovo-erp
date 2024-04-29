@@ -16,6 +16,7 @@ import Packaging from "./views/packer/Packaging.vue";
 import Package from "./views/packer/Package.vue";
 import PackagesList from "./views/Package/List.vue";
 import NotFound from "./views/errors/NotFound.vue";
+import Leftovers from "./views/leftovers/Leftovers.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -68,6 +69,14 @@ const router = createRouter({
                     path: '/package',
                     name: 'package',
                     component: Package,
+                    meta: {
+                        middleware: [packer]
+                    }
+                },
+                {
+                    path: '/leftovers',
+                    name: 'leftovers',
+                    component: Leftovers,
                     meta: {
                         middleware: [packer]
                     }

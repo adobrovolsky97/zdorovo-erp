@@ -5,6 +5,7 @@ namespace App\Http\Resources\Product;
 use App\Enum\Product\Pack;
 use App\Models\Packer\Packer;
 use App\Models\Product\Product;
+use App\Models\Warehouse\Warehouse;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -34,7 +35,24 @@ class ProductResource extends JsonResource
             ],
             'is_available'       => $this->is_available,
             'is_synced_with_crm' => !empty($this->bimpsoft_uuid),
-            'image'              => $this->getFirstMediaUrl('image')
+            'image'              => $this->getFirstMediaUrl('image'),
+            'leftovers'          => $this->whenLoaded('warehouses', function () use ($request) {
+                return $this->warehouses
+                    ->filter(function (Warehouse $warehouse) use ($request) {
+
+                        if ($request->filled('warehouse_id') && $request->input('warehouse_id') != $warehouse->id) {
+                            return false;
+                        }
+
+                        return true;
+                    })
+                    ->map(function ($warehouse) {
+                        return [
+                            'quantity' => $warehouse->pivot->quantity,
+                            'name'     => $warehouse->name,
+                        ];
+                    });
+            }),
         ];
 
         if (Auth::user() instanceof Packer) {

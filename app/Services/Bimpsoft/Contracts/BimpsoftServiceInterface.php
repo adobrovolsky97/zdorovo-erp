@@ -26,10 +26,11 @@ interface BimpsoftServiceInterface
      * Get leftovers
      *
      * @param array $uuids
+     * @param string|null $warehouseUuid
      * @return mixed
      * @throws RequestException
      */
-    public function getLeftovers(array $uuids): array;
+    public function getLeftovers(array $uuids, string $warehouseUuid = null): array;
 
     /**
      * Get prices

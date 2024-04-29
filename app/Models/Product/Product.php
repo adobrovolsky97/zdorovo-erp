@@ -3,10 +3,13 @@
 namespace App\Models\Product;
 
 use App\Enum\Product\Pack;
+use App\Models\Warehouse\Warehouse;
 use Carbon\Carbon;
 use App\Models\Category\Category;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
@@ -18,7 +21,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @property integer $id
  * @property integer $category_id
- * @property integer $leftover
  * @property string $external_id
  * @property float $price
  * @property float $bimpsoft_price
@@ -30,6 +32,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Category $category
+ *
+ * @property Warehouse[]|Collection $warehouses
  */
 class Product extends BaseModel implements HasMedia
 {
@@ -47,7 +51,6 @@ class Product extends BaseModel implements HasMedia
         'barcode',
         'pack',
         'is_available',
-        'leftover',
         'bimpsoft_price',
         'created_at',
         'updated_at'
@@ -88,5 +91,14 @@ class Product extends BaseModel implements HasMedia
             ->addMediaConversion('image')
             ->fit(Manipulations::FIT_CROP, 200, 170)
             ->nonQueued();
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function warehouses(): BelongsToMany
+    {
+        return $this->belongsToMany(Warehouse::class, 'warehouse_products', 'product_id', 'warehouse_id')
+            ->withPivot('quantity');
     }
 }

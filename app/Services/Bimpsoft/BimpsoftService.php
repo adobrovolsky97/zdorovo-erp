@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Http;
 class BimpsoftService implements BimpsoftServiceInterface
 {
     /**
-     *
+     * @var string
      */
     protected const API_URL = 'https://app.bimpsoft.com';
 
@@ -62,16 +62,17 @@ class BimpsoftService implements BimpsoftServiceInterface
      * Get leftovers
      *
      * @param array $uuids
+     * @param string|null $warehouseUuid
      * @return mixed
      * @throws RequestException
      */
-    public function getLeftovers(array $uuids): array
+    public function getLeftovers(array $uuids, string $warehouseUuid = null): array
     {
         $this->getTokenIfNotSet();
         $limit = count($uuids);
 
         $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/nomenclature/api-readLeftovers', [
-            'warehouseUuid'     => config('bimpsoft.warehouse_uuid'),
+            'warehouseUuid'     => $warehouseUuid ?? config('bimpsoft.warehouse_uuid'),
             'nomenclatureUuids' => $uuids,
             'periodable'        => null,
             'pagination'        => [

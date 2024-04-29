@@ -2,14 +2,12 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\EventController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PackerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
-use App\Http\Resources\Event\EventResource;
-use Illuminate\Http\Request;
+use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 /**
  * Auth protected routes
  */
@@ -70,5 +69,13 @@ Route::group(['middleware' => ['auth:api,packer']], function () {
     Route::group(['prefix' => 'notifications'], function () {
         Route::get('', [NotificationController::class, 'index']);
         Route::post('read-all', [NotificationController::class, 'readAll']);
+    });
+
+    /**
+     * Warehouse
+     */
+    Route::group(['prefix' => 'warehouses'], function () {
+        Route::get('', [WarehouseController::class, 'index']);
+        Route::get('leftovers', [WarehouseController::class, 'getLeftovers']);
     });
 });
