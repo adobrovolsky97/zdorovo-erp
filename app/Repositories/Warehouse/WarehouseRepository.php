@@ -27,6 +27,9 @@ class WarehouseRepository extends BaseRepository implements WarehouseRepositoryI
             ->when(!empty($searchParams['warehouse_id']), function ($query) use ($searchParams) {
                 return $query->where('warehouses.id', $searchParams['warehouse_id']);
             })
+            ->when(!empty($searchParams['search']), function ($query) use ($searchParams) {
+                return $query->where('products.name', 'like', '%' . $searchParams['search'] . '%');
+            })
             ->orderBy($searchParams['sort_by'] ?? 'name', $searchParams['sort_dir'] ?? 'asc')
             ->paginate();
     }

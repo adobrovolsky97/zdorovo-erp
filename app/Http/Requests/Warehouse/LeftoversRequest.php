@@ -17,6 +17,7 @@ class LeftoversRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'search'       => ['nullable', 'string', 'max:255'],
             'warehouse_id' => ['nullable', 'integer', Rule::exists(Warehouse::getTableName(), 'id')],
             'sort_by'      => ['nullable', 'string', Rule::in(['name', 'quantity'])],
             'sort_dir'     => ['nullable', 'string', Rule::in(['asc', 'desc'])],
