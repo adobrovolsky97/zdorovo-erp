@@ -30,4 +30,11 @@ interface BimpsoftServiceInterface
      * @throws RequestException
      */
     public function getLeftovers(array $uuids): array;
+
+    /**
+     * Get prices
+     *
+     * @return mixed
+     */
+    public function getPrices(): array;
 }

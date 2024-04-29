@@ -21,6 +21,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property integer $leftover
  * @property string $external_id
  * @property float $price
+ * @property float $bimpsoft_price
  * @property string $bimpsoft_uuid
  * @property string $barcode
  * @property string $name
@@ -47,6 +48,7 @@ class Product extends BaseModel implements HasMedia
         'pack',
         'is_available',
         'leftover',
+        'bimpsoft_price',
         'created_at',
         'updated_at'
     ];

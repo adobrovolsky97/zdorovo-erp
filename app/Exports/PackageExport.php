@@ -60,7 +60,7 @@ class PackageExport implements FromCollection, WithHeadings, WithMapping
             null,
             $row->product->name,
             $row->quantity,
-            $row->product->price
+            $row->product->bimpsoft_price ?? $row->product->price
         ];
     }
 }

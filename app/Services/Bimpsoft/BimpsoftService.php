@@ -62,7 +62,6 @@ class BimpsoftService implements BimpsoftServiceInterface
      * Get leftovers
      *
      * @param array $uuids
-     * @param int $page
      * @return mixed
      * @throws RequestException
      */
@@ -72,12 +71,36 @@ class BimpsoftService implements BimpsoftServiceInterface
         $limit = count($uuids);
 
         $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/nomenclature/api-readLeftovers', [
-            'warehouseUuid' => config('bimpsoft.warehouse_uuid'),
+            'warehouseUuid'     => config('bimpsoft.warehouse_uuid'),
             'nomenclatureUuids' => $uuids,
-            'periodable' => null,
-            'pagination' => [
+            'periodable'        => null,
+            'pagination'        => [
                 'count'  => $limit,
                 'offset' => 0
+            ]
+        ]);
+
+        $response->throwIfServerError();
+        $response->throwIf(!($response->json('success') ?? false));
+
+        return $response->json('data') ?? [];
+    }
+
+    /**
+     * Get prices
+     *
+     * @return mixed
+     * @throws RequestException
+     */
+    public function getPrices(): array
+    {
+        $this->getTokenIfNotSet();
+
+        $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/warehouse/readNomenclatures', [
+            'warehouseUuid' => config('bimpsoft.warehouse_uuid'),
+            'пагинация'     => [
+                'индекс' => 0,
+                'первые' => 0
             ]
         ]);
 
