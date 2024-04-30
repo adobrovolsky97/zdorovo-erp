@@ -16,6 +16,7 @@ class LeftoverResource extends JsonResource
         return [
             'warehouse_name' => $this->resource->warehouse_name,
             'name'           => $this->resource->name,
+            'group'          => $this->resource->group,
             'quantity'       => $this->resource->quantity,
         ];
     }

@@ -77,5 +77,6 @@ Route::group(['middleware' => ['auth:api,packer']], function () {
     Route::group(['prefix' => 'warehouses'], function () {
         Route::get('', [WarehouseController::class, 'index']);
         Route::get('leftovers', [WarehouseController::class, 'getLeftovers']);
+        Route::get('groups', [WarehouseController::class, 'getGroups']);
     });
 });

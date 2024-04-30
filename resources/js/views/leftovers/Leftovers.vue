@@ -31,6 +31,17 @@
                         </option>
                     </select>
                 </div>
+                <div class="w-full">
+                    <div class="label">
+                        <span class="label-text">Група</span>
+                    </div>
+                    <select class="select select-bordered w-full" v-model="filters.group">
+                        <option :value="null">Обрати группу</option>
+                        <option v-for="group in groups" :key="group" :value="group">
+                            {{ group }}
+                        </option>
+                    </select>
+                </div>
             </div>
             <TableSkeleton :items="15" v-if="!isDataLoaded"/>
 
@@ -64,6 +75,7 @@
                                 </span>
                             </th>
                             <th>Склад</th>
+                            <th>Група</th>
                             <th :class="{'text-neutral': filters.sort_by === 'quantity'}">
                                 <span @click="toggleSort('quantity')"
                                       class="flex cursor-pointer flex-row gap-1 items-center"
@@ -93,6 +105,7 @@
                         <tr v-for="item in data.data" :key="item.id">
                             <th>{{ item.name }}</th>
                             <th>{{ item.warehouse_name }}</th>
+                            <th>{{ item.group }}</th>
                             <th>{{ item.quantity }}</th>
                         </tr>
                         </tbody>
@@ -128,11 +141,13 @@ export default {
             isDataLoaded: false,
             data: {},
             warehouses: [],
+            groups: [],
             search: '',
             filters: {
                 sort_by: 'name',
                 sort_dir: 'asc',
                 warehouse_id: null,
+                group: null,
                 page: 1,
             },
             route: useRoute()
@@ -147,6 +162,7 @@ export default {
         'filters': {
             handler: function () {
                 this.fetchWarehouses();
+                this.fetchGroups();
                 this.fetchData();
             },
             deep: true
@@ -184,6 +200,12 @@ export default {
             axios.get('/api/warehouses')
                 .then((response) => {
                     this.warehouses = response.data.data;
+                });
+        },
+        fetchGroups() {
+            axios.get('/api/warehouses/groups')
+                .then((response) => {
+                    this.groups = response.data.data;
                 });
         },
         /**

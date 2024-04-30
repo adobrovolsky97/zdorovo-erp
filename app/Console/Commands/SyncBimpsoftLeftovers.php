@@ -31,6 +31,7 @@ class SyncBimpsoftLeftovers extends Command
 
     /**
      * Execute the console command.
+     * @throws RequestException
      */
     public function handle(ProductServiceInterface $productService, WarehouseServiceInterface $warehouseService): void
     {

@@ -36,14 +36,14 @@ class SyncBimpsoftPrices extends Command
         }
 
 
-        foreach ($bimpsoftService->getPrices()['rows'] as $productPrice) {
-            dd($productPrice);
+        foreach ($bimpsoftService->getPrices()['rows'] as $productData) {
 
             /** @var Product $productToUpdate */
-            if(!empty($productToUpdate = $productsToSync->where('bimpsoft_uuid', $productPrice['GUID'])->first())) {
-                $this->info('Product with uuid ' . $productPrice['GUID'] . ' found in the database. Updating...');
+            if (!empty($productToUpdate = $productsToSync->where('bimpsoft_uuid', $productData['GUID'])->first())) {
+                $this->info('Product with uuid ' . $productData['GUID'] . ' found in the database. Updating...');
                 $productToUpdate->update([
-                    'bimpsoft_price' => $productPrice['Себестоимость']
+                    'bimpsoft_price' => $productData['Себестоимость'],
+                    'group'          => $productData['ГруппаНоменклатуры']['Наименование']
                 ]);
             }
         }

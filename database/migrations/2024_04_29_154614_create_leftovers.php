@@ -22,7 +22,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('warehouse_id')->constrained('warehouses')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
-            $table->integer('quantity');
+            $table->decimal('quantity', 10, 3);
             $table->timestamps();
         });
     }
@@ -32,6 +32,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('warehouse_products');
         Schema::dropIfExists('warehouses');
     }
 };

@@ -27,6 +27,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $bimpsoft_uuid
  * @property string $barcode
  * @property string $name
+ * @property string $group
  * @property Pack $pack
  * @property boolean $is_available
  * @property Carbon $created_at
@@ -50,6 +51,7 @@ class Product extends BaseModel implements HasMedia
         'bimpsoft_uuid',
         'barcode',
         'pack',
+        'group',
         'is_available',
         'bimpsoft_price',
         'created_at',

@@ -27,6 +27,14 @@ class WarehouseService extends BaseCrudService implements WarehouseServiceInterf
     }
 
     /**
+     * @return array
+     */
+    public function getGroups(): array
+    {
+        return $this->repository->getGroups();
+    }
+
+    /**
      * @return string
      */
     protected function getRepositoryClass(): string

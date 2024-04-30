@@ -6,6 +6,7 @@ use App\Http\Requests\Warehouse\LeftoversRequest;
 use App\Http\Resources\Warehouse\LeftoverResource;
 use App\Http\Resources\Warehouse\WarehouseResource;
 use App\Services\Warehouse\Contracts\WarehouseServiceInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
@@ -41,5 +42,14 @@ class WarehouseController extends Controller
     public function getLeftovers(LeftoversRequest $request): AnonymousResourceCollection
     {
         return LeftoverResource::collection($this->warehouseService->getLeftovers($request->validated()));
+    }
+
+    /**
+     * @param LeftoversRequest $request
+     * @return JsonResponse
+     */
+    public function getGroups(LeftoversRequest $request): JsonResponse
+    {
+        return \Response::json(['data' => $this->warehouseService->getGroups($request->validated())]);
     }
 }

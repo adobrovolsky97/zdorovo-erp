@@ -17,4 +17,9 @@ interface WarehouseServiceInterface extends BaseCrudServiceInterface
      * @return LengthAwarePaginator
      */
     public function getLeftovers(array $searchParams = []): LengthAwarePaginator;
+
+    /**
+     * @return array
+     */
+    public function getGroups(): array;
 }

@@ -17,4 +17,9 @@ interface WarehouseRepositoryInterface extends BaseRepositoryInterface
      * @return LengthAwarePaginator
      */
     public function getLeftovers(array $searchParams = []): LengthAwarePaginator;
+
+    /**
+     * @return array
+     */
+    public function getGroups(): array;
 }
