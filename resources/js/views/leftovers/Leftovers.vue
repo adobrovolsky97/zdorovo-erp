@@ -40,25 +40,51 @@
                         <!-- head -->
                         <thead>
                         <tr>
-                            <th>
-                                <span @click="toggleSort('name')" class="flex cursor-pointer flex-row gap-1 items-center" v-if="filters.sort_dir === 'asc'">
+                            <th :class="{'text-neutral': filters.sort_by === 'name'}">
+                                <span @click="toggleSort('name')"
+                                      class="flex cursor-pointer flex-row gap-1 items-center"
+                                      v-if="filters.sort_dir === 'asc'">
                                     Назва
-                                    <svg class="h-5 w-5"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="12" y1="5" x2="12" y2="19" />  <line x1="18" y1="11" x2="12" y2="5" />  <line x1="6" y1="11" x2="12" y2="5" /></svg>
+                                    <svg v-if="filters.sort_by==='name'" class="h-5 w-5" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2"
+                                         stroke="currentColor" fill="none" stroke-linecap="round"
+                                         stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line
+                                        x1="12" y1="5" x2="12" y2="19"/>  <line x1="18" y1="11" x2="12" y2="5"/>  <line
+                                        x1="6" y1="11" x2="12" y2="5"/></svg>
                                 </span>
-                                <span @click="toggleSort('name')" class="flex cursor-pointer flex-row gap-1 items-center" v-else>
+                                <span @click="toggleSort('name')"
+                                      class="flex cursor-pointer flex-row gap-1 items-center" v-else>
                                     Назва
-                                    <svg class="h-5 w-5"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="12" y1="5" x2="12" y2="19" />  <line x1="18" y1="13" x2="12" y2="19" />  <line x1="6" y1="13" x2="12" y2="19" /></svg>
+                                    <svg v-if="filters.sort_by==='name'" class="h-5 w-5" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2"
+                                         stroke="currentColor" fill="none" stroke-linecap="round"
+                                         stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line
+                                        x1="12" y1="5" x2="12" y2="19"/>  <line x1="18" y1="13" x2="12" y2="19"/>  <line
+                                        x1="6" y1="13" x2="12" y2="19"/></svg>
                                 </span>
                             </th>
                             <th>Склад</th>
-                            <th>
-                                <span @click="toggleSort('quantity')" class="flex cursor-pointer flex-row gap-1 items-center" v-if="filters.sort_dir === 'asc'">
+                            <th :class="{'text-neutral': filters.sort_by === 'quantity'}">
+                                <span @click="toggleSort('quantity')"
+                                      class="flex cursor-pointer flex-row gap-1 items-center"
+                                      v-if="filters.sort_dir === 'asc'">
                                     Залишки
-                                    <svg class="h-5 w-5"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="12" y1="5" x2="12" y2="19" />  <line x1="18" y1="11" x2="12" y2="5" />  <line x1="6" y1="11" x2="12" y2="5" /></svg>
+                                    <svg v-if="filters.sort_by==='quantity'" class="h-5 w-5" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2"
+                                         stroke="currentColor" fill="none" stroke-linecap="round"
+                                         stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line
+                                        x1="12" y1="5" x2="12" y2="19"/>  <line x1="18" y1="11" x2="12" y2="5"/>  <line
+                                        x1="6" y1="11" x2="12" y2="5"/></svg>
                                 </span>
-                                <span @click="toggleSort('quantity')" class="flex cursor-pointer flex-row gap-1 items-center" v-else>
+                                <span @click="toggleSort('quantity')"
+                                      class="flex cursor-pointer flex-row gap-1 items-center" v-else>
                                     Залишки
-                                    <svg class="h-5 w-5"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="12" y1="5" x2="12" y2="19" />  <line x1="18" y1="13" x2="12" y2="19" />  <line x1="6" y1="13" x2="12" y2="19" /></svg>
+                                    <svg v-if="filters.sort_by==='quantity'" class="h-5 w-5" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2"
+                                         stroke="currentColor" fill="none" stroke-linecap="round"
+                                         stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line
+                                        x1="12" y1="5" x2="12" y2="19"/>  <line x1="18" y1="13" x2="12" y2="19"/>  <line
+                                        x1="6" y1="13" x2="12" y2="19"/></svg>
                                 </span>
                             </th>
                         </tr>
@@ -178,8 +204,8 @@ export default {
                 });
         },
         toggleSort(param) {
+            this.filters.sort_dir = this.filters.sort_by !== param ? 'asc' : (this.filters.sort_dir === 'asc' ? 'desc' : 'asc');
             this.filters.sort_by = param;
-            this.filters.sort_dir = this.filters.sort_dir === 'asc' ? 'desc' : 'asc';
         },
         /**
          * Resolve query params
