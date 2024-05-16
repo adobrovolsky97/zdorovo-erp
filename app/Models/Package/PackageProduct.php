@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int $id
  * @property int $package_id
  * @property int $product_id
- * @property int $quantity
+ * @property float $quantity
  * @property Pack|null $pack
  * @property Carbon $created_at
  * @property Carbon $updated_at

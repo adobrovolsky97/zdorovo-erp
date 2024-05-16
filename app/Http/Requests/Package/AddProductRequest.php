@@ -17,7 +17,7 @@ class AddProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity' => ['required', 'integer', 'min:1'],
+            'quantity' => ['required', 'numeric', 'min:1'],
             'pack'     => [
                 empty($this->route('product')?->pack) ? 'required' : 'nullable',
                 'string',

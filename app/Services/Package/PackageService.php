@@ -26,12 +26,12 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
      * Add product to package
      *
      * @param Model|Product $product
-     * @param int $quantity
+     * @param float $quantity
      * @param Pack|null $pack
      * @return Package
      * @throws ServiceException
      */
-    public function addProduct(Model|Product $product, int $quantity, Pack $pack = null): Package
+    public function addProduct(Model|Product $product, float $quantity, Pack $pack = null): Package
     {
         if ($quantity <= 0) {
             throw new BadRequestHttpException(__('Quantity must be greater than 0'));

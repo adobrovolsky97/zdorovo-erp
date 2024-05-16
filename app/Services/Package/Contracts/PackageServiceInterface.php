@@ -16,11 +16,11 @@ interface PackageServiceInterface extends BaseCrudServiceInterface
      * Add product to package
      *
      * @param Model $product
-     * @param int $quantity
+     * @param float $quantity
      * @param Pack|null $pack
      * @return Model
      */
-    public function addProduct(Model $product, int $quantity, Pack $pack = null): Model;
+    public function addProduct(Model $product, float $quantity, Pack $pack = null): Model;
 
     /**
      * Delete product from package
