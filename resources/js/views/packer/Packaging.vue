@@ -256,7 +256,7 @@ export default {
             this.form.pack = null;
         },
         addProduct() {
-            if (this.form.qty < 1) {
+            if (this.form.qty < 0) {
                 toast("Невірна кількість товару", {
                     "position": "bottom-right",
                     "theme": this.$store.state.theme,
