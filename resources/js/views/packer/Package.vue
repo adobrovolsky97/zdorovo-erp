@@ -196,12 +196,13 @@ export default {
                 });
         },
         updateProduct(id, qty) {
-            if (qty < 1) {
+            if (qty < 0) {
                 toast("Невірна кількість товару", {
                     "position": "bottom-right",
                     "theme": this.$store.state.theme,
                     "type": "error",
                 })
+                return;
             }
             axios.post(`/api/packages/products/${id}`, {
                 quantity: qty
