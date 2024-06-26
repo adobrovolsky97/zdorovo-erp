@@ -35,8 +35,9 @@ class SyncBimpsoftLeftovers extends Command
      */
     public function handle(ProductServiceInterface $productService, WarehouseServiceInterface $warehouseService): void
     {
+        $warehouses = $warehouseService->getAll();
         foreach ($productService->getAll([['bimpsoft_uuid', 'not_null']])->chunk(100) as $productsToSync) {
-            foreach ($warehouseService->getAll() as $warehouse) {
+            foreach ($warehouses as $warehouse) {
                 $this->syncForWarehouse($warehouse, $productsToSync);
             }
         }
