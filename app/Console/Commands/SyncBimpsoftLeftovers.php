@@ -59,10 +59,6 @@ class SyncBimpsoftLeftovers extends Command
         $warehouseData = [];
 
         foreach ($data as $leftoverData) {
-            if (empty($leftoverData['leftover'])) {
-                continue;
-            }
-
             $productModel = $products->where('bimpsoft_uuid', $leftoverData['uuid'])->first();
 
             if (empty($productModel)) {
@@ -70,11 +66,11 @@ class SyncBimpsoftLeftovers extends Command
                 continue;
             }
 
-            $warehouseData[$productModel->id] = ['quantity' => $leftoverData['leftover']];
+            $warehouseData[$productModel->id] = ['quantity' => $leftoverData['leftover'] ?? 0];
 
             $this->info('Leftovers for product with uuid ' . $leftoverData['uuid'] . ' in warehouse ' . $warehouse->uuid . ' synced');
         }
 
-        $warehouse->products()->syncWithoutDetaching($warehouseData);
+        $warehouse->products()->sync($warehouseData, false);
     }
 }
