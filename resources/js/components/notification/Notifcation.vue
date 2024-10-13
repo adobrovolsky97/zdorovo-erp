@@ -11,8 +11,10 @@
             </div>
         </summary>
         <div tabindex="0" class="mt-3 z-[2] card card-compact border bg-base-100 dropdown-content w-96 shadow">
-            <div class="card-body">
-                <button v-if="notifications.length" @click="readAll" class="btn btn-outline btn-block btn-neutral">Прочитати всі</button>
+            <div class="card-body max-h-96 overflow-x-hidden overflow-y-auto">
+                <button v-if="notifications.length" @click="readAll" class="btn btn-outline btn-block btn-neutral">
+                    Прочитати всі
+                </button>
                 <div role="alert" v-if="notifications.length" class="alert bg-base-300 border shadow-lg"
                      v-for="notification in notifications" :key="notification.id">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -21,7 +23,7 @@
                               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <div>
-                        <div class="text-xs">{{ notification.body }}</div>
+                        <div class="text-xs break-all">{{ notification.body }}</div>
                     </div>
                 </div>
 
@@ -52,7 +54,7 @@ export default {
         this.fetchNotifications();
     },
     methods: {
-        readAll(){
+        readAll() {
             axios.post('/api/notifications/read-all')
                 .then(response => {
                     this.notifications = [];

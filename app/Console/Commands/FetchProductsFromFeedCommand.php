@@ -65,7 +65,7 @@ class FetchProductsFromFeedCommand extends Command
             } catch (Throwable $e) {
                 $name = $product->name->__toString();
                 $notificationService->create([
-                    'body' => "Стала помилка при обробці продукту $name: {$e->getMessage()}"
+                    'body' => "Сталась помилка при обробці продукту $name: {$e->getMessage()}"
                 ]);
                 $this->error($e->getMessage() . ' ' . $e->getFile() . ' ' . $e->getLine());
             }
