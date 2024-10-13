@@ -2,13 +2,14 @@
 
 namespace App\Services\Notification;
 
-use App\Models\Notification\Notification;
 use App\Services\Notification\Contracts\NotificationServiceInterface;
 use App\Repositories\Notification\Contracts\NotificationRepositoryInterface;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Services\BaseCrudService;
 
 /**
  * Class NotificationService
+ *
+ * @property NotificationRepositoryInterface $repository
  */
 class NotificationService extends BaseCrudService implements NotificationServiceInterface
 {
@@ -19,9 +20,7 @@ class NotificationService extends BaseCrudService implements NotificationService
      */
     public function readAll(): void
     {
-        $this->repository->findMany(['is_read' => false])->each(function (Notification $notification) {
-            $notification->update(['is_read' => true]);
-        });
+        $this->repository->readAll();
     }
 
     /**

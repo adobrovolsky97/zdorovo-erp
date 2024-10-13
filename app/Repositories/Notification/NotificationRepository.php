@@ -11,11 +11,19 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Repositories\BaseRepository;
  */
 class NotificationRepository extends BaseRepository implements NotificationRepositoryInterface
 {
-	/**
-	 * @return string
-	 */
-	protected function getModelClass(): string
-	{
-		return Notification::class;
-	}
+    /**
+     * @return void
+     */
+    public function readAll(): void
+    {
+        $this->getQuery()->where('is_read', false)->update(['is_read' => true]);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getModelClass(): string
+    {
+        return Notification::class;
+    }
 }

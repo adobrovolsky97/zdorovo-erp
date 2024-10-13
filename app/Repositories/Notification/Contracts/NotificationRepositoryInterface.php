@@ -9,5 +9,8 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Repositories\Contracts\BaseRe
  */
 interface NotificationRepositoryInterface extends BaseRepositoryInterface
 {
-
+    /**
+     * @return void
+     */
+    public function readAll(): void;
 }
