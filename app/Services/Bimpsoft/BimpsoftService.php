@@ -142,7 +142,7 @@ class BimpsoftService implements BimpsoftServiceInterface
 
         $payload = array_merge($payload, $data);
 
-        $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/invoiceForCustomerPayment/api-insert', $payload);
+        $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/invoiceForCustomerPayment/api-create', $payload);
         $response->throwIf(!($response->json('success') ?? false));
 
         if (empty($response->json('data')['uuid'])) {
