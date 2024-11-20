@@ -121,23 +121,22 @@ class BimpsoftService implements BimpsoftServiceInterface
      */
     public function sendOrder(array $data): string
     {
-        if (empty($data['stocks'])) {
+        if (empty($data['products'])) {
             throw new Exception('Products not found');
         }
 
         $this->getTokenIfNotSet();
 
         $payload = [
-            'projectUuid'        => config('bimpsoft.project_uuid'),
-            'managerUuid'        => config('bimpsoft.manager_uuid'),
-            'contractUuid'       => config('bimpsoft.contract_uuid'),
-            'lineOfBusinessUuid' => config('bimpsoft.line_of_business_uuid'),
-            'organizationUuid'   => config('bimpsoft.organization_uuid'),
-            'warehouseUuid'      => config('bimpsoft.warehouse_uuid'),
-            'customerUuid'       => config('bimpsoft.customer_uuid'),
-            'statusUuid'         => config('bimpsoft.status_uuid'),
-            'addVAT'             => false,
-            'setUpByContract'    => false,
+          'buyer' => config('bimpsoft.customer_uuid'),
+          'organization' => config('bimpsoft.organization_uuid'),
+//          'contract' => config('bimpsoft.contract_uuid'),
+          'warehouse' => config('bimpsoft.warehouse_uuid'),
+          'status' => config('bimpsoft.status_uuid'),
+          'responsible' => config('bimpsoft.manager_uuid'),
+          'lineOfBusiness' => config('bimpsoft.line_of_business_uuid'),
+          'VATaccounted' => true,
+          'detailedWarehouses' => false,
         ];
 
         $payload = array_merge($payload, $data);
@@ -145,11 +144,11 @@ class BimpsoftService implements BimpsoftServiceInterface
         $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/invoiceForCustomerPayment/api-create', $payload);
         $response->throwIf(!($response->json('success') ?? false));
 
-        if (empty($response->json('data')['uuid'])) {
+        if (empty($response->json('data')['GUID'])) {
             throw new Exception('Order not created');
         }
 
-        return $response->json('data')['uuid'];
+        return $response->json('data')['GUID'];
     }
 
     /**

@@ -105,11 +105,11 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
 
             foreach ($package->packageProducts as $packageProduct) {
                 $productsData[$packageProduct->product_id] = [
-                    'nomenclatureUuid'   => $packageProduct->product->bimpsoft_uuid,
-                    'percentageDiscount' => 0,
-                    'reserve'            => 0,
-                    'count'              => $packageProduct->quantity + ($productsData[$packageProduct->product_id]['count'] ?? 0),
-                    'cost'               => $packageProduct->product->price > 0 ? $packageProduct->product->price : 1
+                    'nomenclature' => $packageProduct->product->bimpsoft_uuid,
+                    'discount'     => 0,
+                    'reserve'      => 0,
+                    'count'        => $packageProduct->quantity + ($productsData[$packageProduct->product_id]['count'] ?? 0),
+                    'cost'         => $packageProduct->product->price > 0 ? $packageProduct->product->price : 1
                 ];
 
                 if ($packageProduct->pack !== $packageProduct->product->pack) {
@@ -118,13 +118,15 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
             }
 
             $orderUuid = $bimpsoftService->sendOrder([
-                'stocks'  => array_values($productsData),
+                'products'  => array_values($productsData),
                 'comment' => !empty($comments) ? implode(PHP_EOL, $comments) : null
             ]);
 
             $package->update(['status' => Status::SENT, 'order_uuid' => $orderUuid]);
 
-            SendXlsFileToManagerJob::dispatch($package);
+            if(!app()->isLocal()){
+                SendXlsFileToManagerJob::dispatch($package);
+            }
         });
     }
 
