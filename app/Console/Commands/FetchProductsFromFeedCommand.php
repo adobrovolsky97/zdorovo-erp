@@ -89,7 +89,6 @@ class FetchProductsFromFeedCommand extends Command
     protected function processProduct(object $product): void
     {
         $id = $product->attributes()->id->__toString();
-        $isAvailable = (int)$product->quantity_in_stock->__toString() > 0;
 
         $this->processedExternalIds[] = $id;
 
@@ -129,7 +128,7 @@ class FetchProductsFromFeedCommand extends Command
             'external_id'  => $id,
             'name'         => $product->name->__toString(),
             'barcode'      => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
-            'is_available' => $isAvailable,
+            'is_available' => true,
             'price'        => $product->price->__toString(),
         ]);
 
