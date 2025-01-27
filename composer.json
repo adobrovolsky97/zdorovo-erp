@@ -11,6 +11,7 @@
         "doctrine/dbal": "^3.0",
         "graham-campbell/github": "^12.4",
         "guzzlehttp/guzzle": "^7.2",
+        "laravel-notification-channels/telegram": "^5.0",
         "laravel/framework": "^10.10",
         "laravel/passport": "^11.10",
         "laravel/sanctum": "^3.3",

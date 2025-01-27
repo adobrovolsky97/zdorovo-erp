@@ -9,12 +9,15 @@ use App\Jobs\SendXlsFileToManagerJob;
 use App\Models\Package\Package;
 use App\Models\Package\PackageProduct;
 use App\Models\Product\Product;
+use App\Notifications\MonobankFopPaymentVerifiedNotification;
+use App\Notifications\SendNotificationOnProductEvent;
 use App\Services\Bimpsoft\Contracts\BimpsoftServiceInterface;
 use App\Services\Package\Contracts\PackageServiceInterface;
 use App\Repositories\Package\Contracts\PackageRepositoryInterface;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Services\BaseCrudService;
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -56,10 +59,12 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
             $package = $this->create(['status' => Status::PENDING, 'packer_id' => auth()->guard('packer')->id()]);
         }
 
-        $package->packageProducts()->updateOrCreate(
+        $packageProduct = $package->packageProducts()->updateOrCreate(
             ['product_id' => $product->id, 'pack' => $pack ?? $product->pack],
             ['quantity' => $quantity]
         );
+
+        $this->sendNotification($packageProduct);
 
         return $package->refresh();
     }
@@ -78,6 +83,8 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
         if (empty($package)) {
             throw new BadRequestHttpException('Package not found');
         }
+
+        $this->sendNotification($product, false);
 
         $package->packageProducts()->whereKey($product->id)->delete();
 
@@ -118,16 +125,23 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
             }
 
             $orderUuid = $bimpsoftService->sendOrder([
-                'products'  => array_values($productsData),
-                'comment' => !empty($comments) ? implode(PHP_EOL, $comments) : null
+                'products' => array_values($productsData),
+                'comment'  => !empty($comments) ? implode(PHP_EOL, $comments) : null
             ]);
 
             $package->update(['status' => Status::SENT, 'order_uuid' => $orderUuid]);
 
-            if(!app()->isLocal()){
+            if (!app()->isLocal()) {
                 SendXlsFileToManagerJob::dispatch($package);
             }
         });
+    }
+
+    protected function sendNotification(PackageProduct $product, bool $isAdded = true): void
+    {
+        foreach (config('services.telegram-bot-api.recipients') as $recipient) {
+            Notification::route('telegram', $recipient)->notify(new SendNotificationOnProductEvent($product, $isAdded));
+        }
     }
 
     /**

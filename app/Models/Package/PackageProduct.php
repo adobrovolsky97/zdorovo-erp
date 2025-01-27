@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property Carbon $updated_at
  *
  * @property Product $product
+ * @property Package $package
  */
 class PackageProduct extends Pivot
 {
@@ -51,5 +52,13 @@ class PackageProduct extends Pivot
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function package(): BelongsTo
+    {
+        return $this->belongsTo(Package::class, 'package_id');
     }
 }
