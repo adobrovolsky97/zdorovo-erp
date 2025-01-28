@@ -9,7 +9,6 @@ use App\Jobs\SendXlsFileToManagerJob;
 use App\Models\Package\Package;
 use App\Models\Package\PackageProduct;
 use App\Models\Product\Product;
-use App\Notifications\MonobankFopPaymentVerifiedNotification;
 use App\Notifications\SendNotificationOnProductEvent;
 use App\Services\Bimpsoft\Contracts\BimpsoftServiceInterface;
 use App\Services\Package\Contracts\PackageServiceInterface;
@@ -131,9 +130,7 @@ class PackageService extends BaseCrudService implements PackageServiceInterface
 
             $package->update(['status' => Status::SENT, 'order_uuid' => $orderUuid]);
 
-            if (!app()->isLocal()) {
-                SendXlsFileToManagerJob::dispatch($package);
-            }
+            SendXlsFileToManagerJob::dispatch($package);
         });
     }
 
