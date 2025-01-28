@@ -27,7 +27,7 @@ class TextCmd extends Command
      */
     public function handle()
     {
-        foreach (Package::query()->whereIn('id', [275, 277, 278]) as $package) {
+        foreach (Package::query()->whereIn('id', [275, 277, 278])->get() as $package) {
             $this->info('sending package ' . $package->id);
             SendXlsFileToManagerJob::dispatch($package);
         }
