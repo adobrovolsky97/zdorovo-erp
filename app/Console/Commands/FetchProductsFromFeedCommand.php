@@ -94,21 +94,23 @@ class FetchProductsFromFeedCommand extends Command
 
         $existingProduct = $this->productService->withTrashed()->find(['external_id' => $id])->first();
 
-        $imageUrl = $this->getSmallImageUrl($product->picture->__toString());
+        if (!app()->isLocal()) {
+            $imageUrl = $this->getSmallImageUrl($product->picture->__toString());
 
-        // check if url is valid
-        $content = @file_get_contents($imageUrl);
-        if ($content === false) {
-            $imageUrl = $product->picture->__toString();
+            // check if url is valid
+            $content = @file_get_contents($imageUrl);
+            if ($content === false) {
+                $imageUrl = $product->picture->__toString();
+            }
         }
 
         if (!empty($existingProduct)) {
             /** @var Product $existingProduct */
             $existingProduct->update([
-                'name'         => $product->name->__toString(),
-                'barcode'      => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
-                'price'        => $product->price->__toString(),
-                'deleted_at'   => null,
+                'name'       => $product->name->__toString(),
+                'barcode'    => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
+                'price'      => $product->price->__toString(),
+                'deleted_at' => null,
             ]);
 
             if (!$existingProduct->hasMedia('image') && !empty($imageUrl) && Str::startsWith($imageUrl, [

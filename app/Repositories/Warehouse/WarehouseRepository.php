@@ -6,6 +6,7 @@ use App\Models\Warehouse\Warehouse;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use App\Repositories\Warehouse\Contracts\WarehouseRepositoryInterface;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Repositories\BaseRepository;
+use DB;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
@@ -29,7 +30,7 @@ class WarehouseRepository extends BaseRepository implements WarehouseRepositoryI
                 return $query->where('warehouses.id', $searchParams['warehouse_id']);
             })
             ->when(!empty($searchParams['search']), function ($query) use ($searchParams) {
-                return $query->where('products.name', 'like', '%' . $searchParams['search'] . '%');
+                return $query->where(DB::raw('LOWER(products.name)'), 'like', '%' . strtolower($searchParams['search']) . '%');
             })
             ->when(!empty($searchParams['group']), function ($query) use ($searchParams) {
                 return $query->where('products.group', $searchParams['group']);

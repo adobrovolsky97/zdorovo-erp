@@ -71,10 +71,9 @@ class BimpsoftService implements BimpsoftServiceInterface
         $this->getTokenIfNotSet();
         $limit = count($uuids);
 
-        $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/nomenclature/api-readLeftovers', [
+        $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/nomenclature/api-readStocks', [
             'warehouseUuid'     => $warehouseUuid ?? config('bimpsoft.warehouse_uuid'),
             'nomenclatureUuids' => $uuids,
-            'periodable'        => null,
             'pagination'        => [
                 'count'  => $limit,
                 'offset' => 0

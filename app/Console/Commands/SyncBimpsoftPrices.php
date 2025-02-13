@@ -35,7 +35,6 @@ class SyncBimpsoftPrices extends Command
             return;
         }
 
-
         foreach ($bimpsoftService->getPrices()['rows'] as $productData) {
 
             /** @var Product $productToUpdate */
