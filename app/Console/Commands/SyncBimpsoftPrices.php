@@ -36,7 +36,6 @@ class SyncBimpsoftPrices extends Command
         }
 
         foreach ($bimpsoftService->getPrices()['rows'] as $productData) {
-
             /** @var Product $productToUpdate */
             if (!empty($productToUpdate = $productsToSync->where('bimpsoft_uuid', $productData['GUID'])->first())) {
                 $this->info('Product with uuid ' . $productData['GUID'] . ' found in the database. Updating...');

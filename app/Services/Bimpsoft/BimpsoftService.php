@@ -100,7 +100,7 @@ class BimpsoftService implements BimpsoftServiceInterface
             'warehouseUuid' => config('bimpsoft.warehouse_uuid'),
             'пагинация'     => [
                 'индекс' => 0,
-                'первые' => 0
+                'первые' => 10000
             ]
         ]);
 
