@@ -2,10 +2,10 @@
     <div class="data">
 
         <div class="flex flex-row justify-between items-center">
-            <h1 class="text-3xl font-extrabold">Пакування</h1>
+            <h1 class="text-3xl font-extrabold">Залишки</h1>
             <div
                 class="gap-4 mt-2">
-                <p class="badge badge-outline py-4 text-left text-sm">Знайдено пакувань: {{
+                <p class="badge badge-outline py-4 text-left text-sm">Знайдено залишків: {{
                         data?.meta?.total ?? 0
                     }}</p>
             </div>
@@ -113,7 +113,7 @@
                 </div>
             </div>
             <div v-if="isDataLoaded && data?.meta?.total === 0">
-                <p class="text-center text-2xl font-bold">Не знайдено пакувань</p>
+                <p class="text-center text-2xl font-bold">Не знайдено залишків</p>
             </div>
         </div>
         <div class="pagination mt-4"
