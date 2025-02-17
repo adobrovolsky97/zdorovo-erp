@@ -40,8 +40,6 @@ class CalculateOrderedAmountsForProducts extends Command
         $page = 1;
         $orderedAmounts = [];
 
-        Product::query()->where('ordered_qty', '>', 0)->update(['ordered_qty' => 0, 'qty_to_process' => 0]);
-
         do {
 
             $ordersData = $this->fetchOrders($page);
@@ -95,6 +93,8 @@ class CalculateOrderedAmountsForProducts extends Command
 
     protected function updateDbData(array $orderedAmounts): void
     {
+        Product::query()->where('ordered_qty', '>', 0)->update(['ordered_qty' => 0, 'qty_to_process' => 0]);
+
         foreach (array_chunk($orderedAmounts, 500) as $chunk) {
             $query = "UPDATE `products` SET `ordered_qty` = CASE ";
 
