@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Product\Product;
 use Illuminate\Console\Command;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\DB;
 
 class CalculateOrderedAmountsForProducts extends Command
@@ -77,7 +78,7 @@ class CalculateOrderedAmountsForProducts extends Command
         $this->info('Finished');
     }
 
-    protected function recalculateQtyToProcess()
+    protected function recalculateQtyToProcess(): void
     {
         DB::select("update products
             set qty_to_process = COALESCE(ordered_qty, 0)
@@ -116,6 +117,9 @@ class CalculateOrderedAmountsForProducts extends Command
         }
     }
 
+    /**
+     * @throws RequestException
+     */
     protected function fetchOrders(int $page)
     {
         $response = \Http::withHeaders([
@@ -130,6 +134,7 @@ class CalculateOrderedAmountsForProducts extends Command
                 ]
             ]);
 
+        $response->throwUnlessStatus(200);
 
         return $response->json();
     }
