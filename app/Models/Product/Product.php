@@ -2,6 +2,7 @@
 
 namespace App\Models\Product;
 
+use App\Enum\Product\Label;
 use App\Enum\Product\Pack;
 use App\Models\Warehouse\Warehouse;
 use Carbon\Carbon;
@@ -30,6 +31,11 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $group
  * @property Pack $pack
  * @property boolean $is_available
+ * @property Label $label
+ * @property float $leftovers
+ * @property float $ordered_qty
+ * @property float $qty_to_process
+ * @property float $qty_in_stock
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Category $category
@@ -54,6 +60,11 @@ class Product extends BaseModel implements HasMedia
         'group',
         'is_available',
         'bimpsoft_price',
+        'label',
+        'leftovers',
+        'ordered_qty',
+        'qty_in_stock',
+        'qty_to_process',
         'created_at',
         'updated_at'
     ];
@@ -62,8 +73,23 @@ class Product extends BaseModel implements HasMedia
      * @var string[]
      */
     protected $casts = [
-        'pack' => Pack::class
+        'pack'  => Pack::class,
+        'label' => Label::class
     ];
+
+    public function getCalculatedLeftover(): ?float
+    {
+        if (empty($this->label)) {
+            return $this->qty_in_stock ?? 0;
+        }
+
+        return ($this->qty_in_stock ?? 0) - $this->label->getAmount();
+    }
+
+    public function getQuantityToProcess()
+    {
+        return $this->ordered_qty - $this->getCalculatedLeftover();
+    }
 
     /**
      * @return BelongsTo

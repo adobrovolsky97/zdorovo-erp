@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\SearchRequest;
+use App\Http\Requests\Product\TaskRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Resources\Product\ProductResource;
+use App\Http\Resources\Product\TaskResource;
 use App\Models\Product\Product;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -44,5 +46,14 @@ class ProductController extends Controller
     public function update(Product $product, UpdateRequest $request): ProductResource
     {
         return ProductResource::make($this->productService->update($product, $request->validated()));
+    }
+
+    /**
+     * @param TaskRequest $request
+     * @return AnonymousResourceCollection
+     */
+    public function getTasks(TaskRequest $request): AnonymousResourceCollection
+    {
+        return TaskResource::collection($this->productService->getAllPaginated($request->validated()));
     }
 }

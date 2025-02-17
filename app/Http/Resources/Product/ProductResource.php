@@ -28,6 +28,10 @@ class ProductResource extends JsonResource
             'external_id'        => $this->external_id,
             'name'               => $this->name,
             'pack'               => $this->pack?->title(),
+            'label'              => [
+                'id'   => $this->label?->value,
+                'name' => $this->label?->title()
+            ],
             'leftover'           => $this->leftover,
             'category'           => [
                 'id'   => $this->category?->id,

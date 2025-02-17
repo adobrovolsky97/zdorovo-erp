@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CalculateOrderedAmountsForProducts;
 use App\Console\Commands\FetchProductsFromFeedCommand;
 use App\Console\Commands\SyncBimpsoftLeftovers;
 use App\Console\Commands\SyncBimpsoftPrices;
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(SyncProductsCommand::class)->everyTenMinutes()->withoutOverlapping();
         $schedule->command(SyncBimpsoftPrices::class)->everyTenMinutes()->withoutOverlapping();
         $schedule->command(SyncBimpsoftLeftovers::class)->everyFiveMinutes()->withoutOverlapping();
+        $schedule->command(CalculateOrderedAmountsForProducts::class)->everyTenMinutes()->withoutOverlapping();
         $schedule->command('telescope:prune')->weekly();
     }
 

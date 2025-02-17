@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Enum\Product\Label;
 use App\Enum\Product\Pack;
 use App\Models\Category\Category;
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,6 +18,7 @@ class UpdateRequest extends FormRequest
         return [
             'category_id'  => ['nullable', 'integer', Rule::exists(Category::getTableName(), 'id')],
             'pack'         => ['nullable', 'string', Rule::enum(Pack::class)],
+            'label'        => ['nullable', 'string', Rule::enum(Label::class)],
             'is_available' => ['nullable', 'boolean'],
         ];
     }

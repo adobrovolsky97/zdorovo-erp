@@ -17,6 +17,7 @@ import Package from "./views/packer/Package.vue";
 import PackagesList from "./views/Package/List.vue";
 import NotFound from "./views/errors/NotFound.vue";
 import Leftovers from "./views/leftovers/Leftovers.vue";
+import Tasks from "./views/Tasks/Tasks.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -77,6 +78,14 @@ const router = createRouter({
                     path: '/leftovers',
                     name: 'leftovers',
                     component: Leftovers,
+                    meta: {
+                        middleware: [packer]
+                    }
+                },
+                {
+                    path: '/tasks',
+                    name: 'tasks',
+                    component: Tasks,
                     meta: {
                         middleware: [packer]
                     }

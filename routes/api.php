@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth:api,packer']], function () {
 
     Route::group(['prefix' => 'products'], function () {
         Route::get('', [ProductController::class, 'index']);
+        Route::get('tasks', [ProductController::class, 'getTasks']);
         Route::put('{product}', [ProductController::class, 'update']);
     });
 

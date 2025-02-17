@@ -43,17 +43,29 @@
                         </select>
                     </div>
                     <div class="flex flex-col w-full justify-start items-start">
+                        <p class="text-sm">Ярлик</p>
+                        <select v-model="localProduct.label.id" class="select select-sm select-bordered w-full">
+                            <option :value="null">Ярлик не обрано</option>
+                            <option :value="label.id" v-for="label in labelValues" :key="label.id">
+                                {{ label.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col w-full justify-start items-start">
                         <p class="text-sm">Показувати?</p>
                         <input true-value="1" false-value="0" type="checkbox" v-model="localProduct.is_available" class="checkbox checkbox-warning">
                     </div>
                     <button class="btn btn-success btn-sm self-end" @click="updateProduct">Зберегти</button>
                 </div>
-                <div v-else class="flex flex-col gap-2 w-full">
+                <div v-else class="flex flex-col gap-1 w-full">
                     <div class="flex flex-row items-center justify-center gap-2">
                         <span class="font-bold">Категорія:</span> {{ localProduct.category?.name ?? 'Не вказана' }}
                     </div>
                     <div class="flex flex-row items-center justify-center gap-2">
                         <span class="font-bold">Дой-Пак:</span> {{ localProduct.pack ?? 'Не вказано' }}
+                    </div>
+                    <div class="flex flex-row items-center justify-center gap-2">
+                        <span class="font-bold">Ярлик:</span> {{ localProduct.label?.name ?? 'Не вказано' }}
                     </div>
                     <div class="flex flex-row items-center justify-center gap-2">
                         <span class="font-bold"
@@ -84,6 +96,20 @@ export default {
         return {
             localProduct: this.product,
             isEditMode: false,
+            labelValues: [
+                {
+                    id: 'big_reserve_100',
+                    name: 'Великий резерв 100'
+                },
+                {
+                    id: 'small_reserve_10',
+                    name: 'Малий резерв 10'
+                },
+                {
+                    id: 'no_reserve',
+                    name: 'Без резерву (ФК)'
+                },
+            ],
             packValues: [
                 {
                     id: '150',
@@ -115,6 +141,7 @@ export default {
             axios.put(`/api/products/${this.localProduct.id}`, {
                 category_id: this.localProduct.category.id,
                 pack: this.localProduct.pack,
+                label: this.localProduct.label.id,
                 is_available: this.localProduct.is_available
             })
                 .then(response => {

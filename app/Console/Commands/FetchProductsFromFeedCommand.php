@@ -107,10 +107,12 @@ class FetchProductsFromFeedCommand extends Command
         if (!empty($existingProduct)) {
             /** @var Product $existingProduct */
             $existingProduct->update([
-                'name'       => $product->name->__toString(),
-                'barcode'    => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
-                'price'      => $product->price->__toString(),
-                'deleted_at' => null,
+                'name'           => $product->name->__toString(),
+                'barcode'        => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
+                'price'          => $product->price->__toString(),
+                'qty_in_stock'   => (float)$product->quantity_in_stock->__toString(),
+                'qty_to_process' => $existingProduct->getQuantityToProcess(),
+                'deleted_at'     => null,
             ]);
 
             if (!$existingProduct->hasMedia('image') && !empty($imageUrl) && Str::startsWith($imageUrl, [
@@ -130,6 +132,7 @@ class FetchProductsFromFeedCommand extends Command
             'external_id'  => $id,
             'name'         => $product->name->__toString(),
             'barcode'      => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
+            'qty_in_stock' => (float)$product->quantity_in_stock?->__toString(),
             'is_available' => true,
             'price'        => $product->price->__toString(),
         ]);

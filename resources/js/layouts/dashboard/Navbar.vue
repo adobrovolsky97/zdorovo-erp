@@ -84,6 +84,17 @@
                                     Залишки
                                 </a>
                             </router-link>
+                            <router-link
+                                v-if="packer_user"
+                                :to="{name: 'tasks'}"
+                                custom
+                                v-slot="{ navigate, href }"
+                            >
+                                <a class="tab" :class="{'tab-active': $route.path.startsWith('/tasks')}"
+                                   @click="navigate">
+                                    Завдання на фасовку
+                                </a>
+                            </router-link>
                         </div>
                     </div>
                 </div>
