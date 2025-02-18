@@ -143,12 +143,11 @@ class BimpsoftService implements BimpsoftServiceInterface
         $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/invoiceForCustomerPayment/api-create', $payload);
         $response->throwIf(!($response->json('success') ?? false));
 
-        \Log::info(json_encode($response->json()));
-        if (empty($response->json('data')['GUID'])) {
+        if (empty($response->json('data')['uuid'])) {
             throw new Exception('Order not created');
         }
 
-        return $response->json('data')['GUID'];
+        return $response->json('data')['uuid'];
     }
 
     /**
