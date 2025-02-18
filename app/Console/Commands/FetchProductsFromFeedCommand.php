@@ -109,7 +109,7 @@ class FetchProductsFromFeedCommand extends Command
             $existingProduct->update([
                 'name'           => $product->name->__toString(),
                 'barcode'        => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
-                'price'          => $product->price->__toString(),
+                'price'          => $product->vendorprice->__toString(),
                 'qty_in_stock'   => (float)$product->quantity_in_stock->__toString(),
                 'qty_to_process' => $existingProduct->getQuantityToProcess(),
                 'deleted_at'     => null,
@@ -134,7 +134,7 @@ class FetchProductsFromFeedCommand extends Command
             'barcode'      => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
             'qty_in_stock' => (float)$product->quantity_in_stock?->__toString(),
             'is_available' => true,
-            'price'        => $product->price->__toString(),
+            'price'        => $product->vendorprice->__toString(),
         ]);
 
         if (!empty($imageUrl) && Str::startsWith($imageUrl, ['http', 'https'])) {
