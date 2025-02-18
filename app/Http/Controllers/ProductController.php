@@ -54,6 +54,6 @@ class ProductController extends Controller
      */
     public function getTasks(TaskRequest $request): AnonymousResourceCollection
     {
-        return TaskResource::collection($this->productService->getAllPaginated($request->validated()));
+        return TaskResource::collection($this->productService->getAllPaginated(array_merge($request->validated(), ['is_synced_with_crm' => true])));
     }
 }
