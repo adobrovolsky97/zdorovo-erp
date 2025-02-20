@@ -73,7 +73,7 @@ class BimpsoftService implements BimpsoftServiceInterface
 
         $response = Http::withHeader('access-token', $this->accessToken)->post(self::API_URL . '/org2/nomenclature/api-readStocks', [
             'warehouseUuid'     => $warehouseUuid ?? config('bimpsoft.warehouse_uuid'),
-            'nomenclatureUuids' => $uuids,
+            'nomenclatureUuid' => $uuids,
             'pagination'        => [
                 'count'  => $limit,
                 'offset' => 0
