@@ -22,7 +22,17 @@ class TaskResource extends JsonResource
         return [
             'id'                  => $this->id,
             'name'                => $this->name,
+            'pack'                => $this->pack?->title(),
+            'label'              => [
+                'id'   => $this->label?->value,
+                'name' => $this->label?->title()
+            ],
             'leftovers'           => $this->getCalculatedLeftover(),
+            'category'           => [
+                'id'   => $this->category?->id,
+                'name' => $this->category?->name
+            ],
+            'is_available'       => $this->is_available,
             'ordered_qty'         => $this->ordered_qty,
             'quantity_to_process' => $this->qty_to_process,
         ];

@@ -52,6 +52,8 @@
                                         x1="6" y1="13" x2="12" y2="19"/></svg>
                                 </span>
                             </th>
+                            <th>Ярлик</th>
+                            <th>Упаковка</th>
                             <th :class="{'text-neutral': filters.order_by === 'leftovers'}">
                                 <span @click="toggleSort('leftovers')"
                                       class="flex cursor-pointer flex-row gap-1 items-center"
@@ -103,7 +105,8 @@
                                       class="flex cursor-pointer flex-row gap-1 items-center"
                                       v-if="filters.order_dir === 'asc'">
                                    Потрібно нафасувати
-                                    <svg v-if="filters.order_by==='qty_to_process'" class="h-5 w-5" width="24" height="24"
+                                    <svg v-if="filters.order_by==='qty_to_process'" class="h-5 w-5" width="24"
+                                         height="24"
                                          viewBox="0 0 24 24" stroke-width="2"
                                          stroke="currentColor" fill="none" stroke-linecap="round"
                                          stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line
@@ -113,7 +116,8 @@
                                 <span @click="toggleSort('qty_to_process')"
                                       class="flex cursor-pointer flex-row gap-1 items-center" v-else>
                                     Потрібно нафасувати
-                                    <svg v-if="filters.order_by==='qty_to_process'" class="h-5 w-5" width="24" height="24"
+                                    <svg v-if="filters.order_by==='qty_to_process'" class="h-5 w-5" width="24"
+                                         height="24"
                                          viewBox="0 0 24 24" stroke-width="2"
                                          stroke="currentColor" fill="none" stroke-linecap="round"
                                          stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line
@@ -121,14 +125,41 @@
                                         x1="6" y1="13" x2="12" y2="19"/></svg>
                                 </span>
                             </th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr :class="{'bg-red-100': item.quantity_to_process > 0, 'bg-green-100': item.quantity_to_process < 0}" v-for="item in data.data" :key="item.id">
+                        <tr :class="{'bg-red-100': item.quantity_to_process > 0, 'bg-green-100': item.quantity_to_process < 0}"
+                            v-for="item in data.data" :key="item.id">
                             <th>{{ item.name }}</th>
+                            <th v-if="productToEdit?.id !== item.id">{{ item.label?.name }}</th>
+                            <th v-else>
+                                <select v-model="productToEdit.label.id" class="select select-sm select-bordered w-full">
+                                    <option :value="null">Ярлик не обрано</option>
+                                    <option :value="label.id" v-for="label in labelValues" :key="label.id">
+                                        {{ label.name }}
+                                    </option>
+                                </select>
+                            </th>
+                            <th>{{ item.pack }}</th>
                             <th>{{ item.leftovers ?? 0 }}</th>
                             <th>{{ item.ordered_qty ?? 0 }}</th>
-                            <th>{{ item.quantity_to_process}}</th>
+                            <th>{{ item.quantity_to_process }}</th>
+                            <th>
+                                <svg v-if="productToEdit?.id !== item.id" class="h-6 w-6 cursor-pointer"
+                                     @click="editProduct(item)" fill="none" viewBox="0 0 24 24"
+                                     stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+
+                                <svg v-if="productToEdit?.id === item.id" class="h-6 w-6 text-green-500 cursor-pointer"
+                                     @click="updateLabel(item)" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </th>
                         </tr>
                         </tbody>
                     </table>
@@ -154,6 +185,7 @@ import Pagination from "../../components/pagination/Pagination.vue";
 import {useRoute} from "vue-router";
 import axios from "axios";
 import TagInput from "../../components/TagInput/TagInput.vue";
+import {toast} from "vue3-toastify";
 
 export default {
     name: "Leftovers",
@@ -168,7 +200,22 @@ export default {
                 order_dir: 'asc',
                 page: 1,
             },
-            route: useRoute()
+            route: useRoute(),
+            productToEdit: null,
+            labelValues: [
+                {
+                    id: 'big_reserve_100',
+                    name: 'Великий резерв 100'
+                },
+                {
+                    id: 'small_reserve_10',
+                    name: 'Малий резерв 10'
+                },
+                {
+                    id: 'no_reserve',
+                    name: 'Без резерву (ФК)'
+                },
+            ],
         }
     },
     components: {
@@ -180,7 +227,7 @@ export default {
         this.resolveQueryParams();
     },
     watch: {
-        'filters' : {
+        'filters': {
             handler: function () {
                 this.fetchData();
             },
@@ -199,6 +246,32 @@ export default {
         this.isDataLoaded = false;
     },
     methods: {
+        editProduct(product) {
+            this.productToEdit = product;
+        },
+        updateLabel() {
+            if (!this.productToEdit) {
+                return;
+            }
+            axios.put(`/api/products/${this.productToEdit.id}`, {
+                category_id: this.productToEdit.category.id,
+                pack: this.productToEdit.pack,
+                label: this.productToEdit.label.id,
+                is_available: this.productToEdit.is_available
+            })
+                .then(response => {
+                    this.productToEdit = null;
+
+                    this.fetchData();
+                })
+                .catch(error => {
+                    toast("Виникла помилка при оновленні товара", {
+                        "position": "bottom-right",
+                        "theme": this.$store.state.theme,
+                        "type": "error",
+                    })
+                });
+        },
         /**
          * Update page
          * @param page
