@@ -208,6 +208,14 @@ export default {
                     name: 'Великий резерв 100'
                 },
                 {
+                    id: 'big_reserve_300',
+                    name: 'Великий резерв 300'
+                },
+                {
+                    id: 'big_reserve_500',
+                    name: 'Великий резерв 500'
+                },
+                {
                     id: 'small_reserve_10',
                     name: 'Малий резерв 10'
                 },
