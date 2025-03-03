@@ -23,18 +23,19 @@ class TaskResource extends JsonResource
             'id'                  => $this->id,
             'name'                => $this->name,
             'pack'                => $this->pack?->title(),
-            'label'              => [
+            'label'               => [
                 'id'   => $this->label?->value,
                 'name' => $this->label?->title()
             ],
             'leftovers'           => $this->getCalculatedLeftover(),
-            'category'           => [
+            'category'            => [
                 'id'   => $this->category?->id,
                 'name' => $this->category?->name
             ],
-            'is_available'       => $this->is_available,
+            'is_available'        => $this->is_available,
             'ordered_qty'         => $this->ordered_qty,
             'quantity_to_process' => $this->qty_to_process,
+            'last_sync_time'      => $this->last_sync_time->format('d.m.Y H:i:s')
         ];
     }
 }

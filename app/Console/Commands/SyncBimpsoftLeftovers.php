@@ -53,14 +53,16 @@ class SyncBimpsoftLeftovers extends Command
      */
     protected function syncForWarehouse(Warehouse $warehouse, Collection $products): void
     {
+        $productUuids = $products->pluck('bimpsoft_uuid')->toArray();
         $data = app(BimpsoftServiceInterface::class)->getLeftovers(
-            $products->pluck('bimpsoft_uuid')->toArray(),
+            $productUuids,
             $warehouse->uuid
         );
 
         $warehouseData = [];
 
         foreach ($data as $leftoverData) {
+            /** @var Product $productModel */
             $productModel = $products->where('bimpsoft_uuid', $leftoverData['nomenclatureUuid'])->first();
 
             if (empty($productModel)) {
@@ -74,5 +76,6 @@ class SyncBimpsoftLeftovers extends Command
         }
 
         $warehouse->products()->sync($warehouseData, false);
+        Product::query()->whereIn('bimpsoft_uuid', $productUuids)->update(['last_sync_time' => now()]);
     }
 }

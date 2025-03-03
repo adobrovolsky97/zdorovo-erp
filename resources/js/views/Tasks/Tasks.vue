@@ -125,6 +125,7 @@
                                         x1="6" y1="13" x2="12" y2="19"/></svg>
                                 </span>
                             </th>
+                            <th>Час синхронізації</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -145,6 +146,7 @@
                             <th>{{ item.leftovers ?? 0 }}</th>
                             <th>{{ item.ordered_qty ?? 0 }}</th>
                             <th>{{ item.quantity_to_process }}</th>
+                            <th>{{ item.last_sync_time }}</th>
                             <th>
                                 <svg v-if="productToEdit?.id !== item.id" class="h-6 w-6 cursor-pointer"
                                      @click="editProduct(item)" fill="none" viewBox="0 0 24 24"

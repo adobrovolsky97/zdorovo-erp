@@ -36,6 +36,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property float $ordered_qty
  * @property float $qty_to_process
  * @property float $qty_in_stock
+ * @property Carbon $last_sync_time
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Category $category
@@ -64,6 +65,7 @@ class Product extends BaseModel implements HasMedia
         'leftovers',
         'ordered_qty',
         'qty_in_stock',
+        'last_sync_time',
         'qty_to_process',
         'created_at',
         'updated_at'
@@ -73,8 +75,9 @@ class Product extends BaseModel implements HasMedia
      * @var string[]
      */
     protected $casts = [
-        'pack'  => Pack::class,
-        'label' => Label::class
+        'pack'           => Pack::class,
+        'label'          => Label::class,
+        'last_sync_time' => 'datetime'
     ];
 
     public function getCalculatedLeftover(): ?float
