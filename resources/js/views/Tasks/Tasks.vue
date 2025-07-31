@@ -299,7 +299,7 @@
 
                             <th v-if="productToEdit?.id !== item.id">{{ item.safety_stock ?? 0 }}</th>
                             <th v-else>
-                                <input type="text" class="input input-bordered input-sm w-full w-20"
+                                <input type="text" class="input input-bordered input-sm w-30"
                                        v-model="productToEdit.safety_stock" placeholder="Резерв"/>
                             </th>
 
