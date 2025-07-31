@@ -18,7 +18,7 @@ return new class extends Migration
             $table->float('quantity');
             $table->date('order_date');
             $table->timestamps();
-            $table->unique(['order_id', 'product_external_id'], 'ordered_products_order_product_idx');
+            $table->index(['order_id', 'product_external_id'], 'ordered_products_order_product_idx');
         });
     }
 
