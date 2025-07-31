@@ -109,8 +109,7 @@ class CalculateDailyDemandCommand extends Command
                 'limit'  => 100,
                 'filter' => [
                     'setStatusTime' => [
-                        // TODO change to 1
-                        'from' => today()->subDays(3)->format('Y-m-d') . ' 00:00:01',
+                        'from' => today()->subDay()->format('Y-m-d') . ' 00:00:01',
                         'to'   => today()->format('Y-m-d') . ' 23:59:59',
                     ],
                     'statusId'      => [5, 74]
