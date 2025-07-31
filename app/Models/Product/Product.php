@@ -33,6 +33,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property boolean $is_available
  * @property Label $label
  * @property float $leftovers
+ * @property integer $daily_demand
+ * @property integer $safety_stock
  * @property float $ordered_qty
  * @property float $qty_to_process
  * @property float $qty_in_stock
@@ -67,6 +69,8 @@ class Product extends BaseModel implements HasMedia
         'qty_in_stock',
         'last_sync_time',
         'qty_to_process',
+        'daily_demand',
+        'safety_stock',
         'created_at',
         'updated_at'
     ];
@@ -92,6 +96,21 @@ class Product extends BaseModel implements HasMedia
     public function getQuantityToProcess()
     {
         return $this->ordered_qty - $this->getCalculatedLeftover();
+    }
+
+    public function getNewQuantityToProcessForSafetyStock(?int $safetyStock): float|int|null
+    {
+        if(empty($this->daily_demand) || empty($safetyStock)) {
+            return null;
+        }
+
+        $result = $this->daily_demand * $safetyStock - $this->getCalculatedLeftover();
+
+        if($result < 0) {
+            return null;
+        }
+
+        return $result;
     }
 
     /**

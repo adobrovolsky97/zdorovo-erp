@@ -24,28 +24,80 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return parent::applyFilters($searchParams)
             ->when(!empty($searchParams['search']), function (Builder $query) use ($searchParams) {
                 $search = strtolower($searchParams['search']);
-                return $query->where(DB::raw('LOWER(name)'), 'like', "%$search%");
+                $query->where(DB::raw('LOWER(name)'), 'like', "%$search%");
             })
             ->when(!empty($searchParams['categories']), function (Builder $query) use ($searchParams) {
-                return $query->whereIn('category_id', $searchParams['categories']);
+                $query->whereIn('category_id', $searchParams['categories']);
+            })
+            ->when(!empty($searchParams['labels']), function (Builder $query) use ($searchParams) {
+                $query->whereIn('label', $searchParams['labels']);
+            })
+            ->when(!empty($searchParams['packs']), function (Builder $query) use ($searchParams) {
+                $query->whereIn('pack', $searchParams['packs']);
+            })
+            ->when(!empty($searchParams['qty_in_stock_from']), function (Builder $query) use ($searchParams) {
+                $query->whereRaw('COALESCE(qty_in_stock, 0) - (
+                CASE
+                    WHEN label = \'big_reserve_100\' THEN 100
+                    WHEN label = \'big_reserve_300\' THEN 300
+                    WHEN label = \'big_reserve_500\' THEN 500
+                    WHEN label = \'small_reserve_10\' THEN 10
+                    WHEN label = \'no_reserve\' THEN 0
+                    ELSE 0
+                END
+            ) >= ?', [$searchParams['qty_in_stock_from']]);
+            })
+            ->when(!empty($searchParams['qty_in_stock_to']), function (Builder $query) use ($searchParams) {
+                $query->whereRaw('COALESCE(qty_in_stock, 0) - (
+                CASE
+                    WHEN label = \'big_reserve_100\' THEN 100
+                    WHEN label = \'big_reserve_300\' THEN 300
+                    WHEN label = \'big_reserve_500\' THEN 500
+                    WHEN label = \'small_reserve_10\' THEN 10
+                    WHEN label = \'no_reserve\' THEN 0
+                    ELSE 0
+                END
+            ) <= ?', [$searchParams['qty_in_stock_to']]);
+            })
+            ->when(!empty($search['ordered_qty_from']), function (Builder $query) use ($searchParams) {
+                $query->where('ordered_qty', '>=', $searchParams['ordered_qty_from']);
+            })
+            ->when(!empty($searchParams['ordered_qty_to']), function (Builder $query) use ($searchParams) {
+                $query->where('ordered_qty', '<=', $searchParams['ordered_qty_to']);
+            })
+            ->when(!empty($searchParams['qty_to_process_from']), function (Builder $query) use ($searchParams) {
+                $query->where('qty_to_process', '>=', $searchParams['qty_to_process_from']);
+            })
+            ->when(!empty($searchParams['qty_to_process_to']), function (Builder $query) use ($searchParams) {
+                $query->where('qty_to_process', '<=', $searchParams['qty_to_process_to']);
             })
             ->when(isset($searchParams['is_synced_with_crm']), function (Builder $query) use ($searchParams) {
-                return $searchParams['is_synced_with_crm']
+                $searchParams['is_synced_with_crm']
                     ? $query->whereNotNull('bimpsoft_uuid')
                     : $query->whereNull('bimpsoft_uuid');
             })
             ->when(!empty($searchParams['order_by']), function (Builder $query) use ($searchParams) {
                 switch ($searchParams['order_by']) {
                     case 'name':
+                    case 'daily_demand':
+                    case 'safety_stock':
                     case 'ordered_qty':
+                    case 'label':
+                    case 'pack':
                     case 'qty_to_process':
                         $query->reorder($searchParams['order_by'], $searchParams['order_dir'] ?? 'desc');
                         break;
                     case 'leftovers':
-                        $query->reorder(DB::raw("COALESCE(qty_in_stock, 0) - (case
-                                     when label = 'big_reserve_100' then 100
-                                     when label = 'small_reserve_10' then 10
-                                     else 0 end)"), $searchParams['order_dir'] ?? 'desc');
+                        $query->reorder(DB::raw("COALESCE(qty_in_stock, 0) - (
+                            CASE
+                                WHEN label = 'big_reserve_100' THEN 100
+                                WHEN label = 'big_reserve_300' THEN 300
+                                WHEN label = 'big_reserve_500' THEN 500
+                                WHEN label = 'small_reserve_10' THEN 10
+                                WHEN label = 'no_reserve' THEN 0
+                                ELSE 0
+                            END
+                        )"), $searchParams['order_dir'] ?? 'desc');
                         break;
                 }
             });

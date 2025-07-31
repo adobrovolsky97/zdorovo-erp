@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CalculateDailyDemandCommand;
 use App\Console\Commands\CalculateOrderedAmountsForProducts;
 use App\Console\Commands\FetchProductsFromFeedCommand;
 use App\Console\Commands\SyncBimpsoftLeftovers;
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command(CalculateDailyDemandCommand::class)->everySixHours()->withoutOverlapping();
         $schedule->command(FetchProductsFromFeedCommand::class)->everyTenMinutes()->withoutOverlapping();
         $schedule->command(SyncProductsCommand::class)->everyTenMinutes()->withoutOverlapping();
         $schedule->command(SyncBimpsoftPrices::class)->everyTenMinutes()->withoutOverlapping();

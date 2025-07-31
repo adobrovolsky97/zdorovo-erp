@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Product\Product;
+use App\Observers\ProductObserver;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Notification\Contracts\NotificationRepositoryInterface;
@@ -64,6 +66,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Product::observe(ProductObserver::class);
     }
 }

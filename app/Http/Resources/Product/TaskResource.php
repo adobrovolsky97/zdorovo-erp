@@ -34,6 +34,8 @@ class TaskResource extends JsonResource
             ],
             'is_available'        => $this->is_available,
             'ordered_qty'         => $this->ordered_qty,
+            'daily_demand'        => $this->daily_demand,
+            'safety_stock'        => $this->safety_stock,
             'quantity_to_process' => $this->qty_to_process,
             'last_sync_time'      => $this->last_sync_time->format('d.m.Y H:i:s')
         ];

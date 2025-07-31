@@ -35,7 +35,7 @@ class CalculateOrderedAmountsForProducts extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $page = 1;
         $orderedAmounts = [];
@@ -72,23 +72,59 @@ class CalculateOrderedAmountsForProducts extends Command
         } while ($page <= $maxPages);
 
         $this->updateDbData($orderedAmounts);
-        $this->recalculateQtyToProcess();
+        self::recalculateQtyToProcess();
         $this->info('Finished');
     }
 
-    protected function recalculateQtyToProcess(): void
+    public static function recalculateQtyToProcess(): void
     {
-        DB::select("update products
-            set qty_to_process = COALESCE(ordered_qty, 0)
-                                     - COALESCE(COALESCE(qty_in_stock, 0)
-                                                    - (case
-                                                       when label = 'big_reserve_100'
-                                                           then 100
-                                                       when label = 'small_reserve_10'
-                                                           then 10
-                                                       else 0 end), 0)
-            where id > 0;
-        ");
+        DB::statement("
+        UPDATE products
+        SET qty_to_process =
+            CASE
+                WHEN COALESCE(daily_demand, 0) > 0 AND COALESCE(safety_stock, 0) > 0 THEN
+                    CASE
+                        WHEN (
+                            (daily_demand * safety_stock) -
+                            (
+                                COALESCE(ordered_qty, 0) -
+                                COALESCE(
+                                    COALESCE(qty_in_stock, 0) -
+                                    CASE
+                                        WHEN label = 'big_reserve_100' THEN 100
+                                        WHEN label = 'big_reserve_300' THEN 300
+                                        WHEN label = 'big_reserve_500' THEN 500
+                                        WHEN label = 'small_reserve_10' THEN 10
+                                        WHEN label = 'no_reserve' THEN 0
+                                        ELSE 0
+                                    END,
+                                    0
+                                )
+                            )
+                        ) < 0 THEN NULL
+                        ELSE (
+                            (daily_demand * safety_stock) -
+                            (
+                                COALESCE(ordered_qty, 0) -
+                                COALESCE(
+                                    COALESCE(qty_in_stock, 0) -
+                                    CASE
+                                        WHEN label = 'big_reserve_100' THEN 100
+                                        WHEN label = 'big_reserve_300' THEN 300
+                                        WHEN label = 'big_reserve_500' THEN 500
+                                        WHEN label = 'small_reserve_10' THEN 10
+                                        WHEN label = 'no_reserve' THEN 0
+                                        ELSE 0
+                                    END,
+                                    0
+                                )
+                            )
+                        )
+                    END
+                ELSE NULL
+            END
+        WHERE id > 0
+    ");
     }
 
     protected function updateDbData(array $orderedAmounts): void

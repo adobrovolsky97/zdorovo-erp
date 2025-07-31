@@ -45,7 +45,12 @@ class ProductController extends Controller
      */
     public function update(Product $product, UpdateRequest $request): ProductResource
     {
-        return ProductResource::make($this->productService->update($product, $request->validated()));
+        $params = $request->validated();
+        if($request->input('safety_stock') !== $product->safety_stock) {
+            $params['qty_to_process'] = $product->getNewQuantityToProcessForSafetyStock($params['safety_stock']);
+        }
+
+        return ProductResource::make($this->productService->update($product, $params));
     }
 
     /**
