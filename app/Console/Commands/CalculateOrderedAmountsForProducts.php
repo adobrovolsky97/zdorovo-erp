@@ -87,7 +87,7 @@ class CalculateOrderedAmountsForProducts extends Command
                     CASE
                         WHEN (
                             (daily_demand * safety_stock) -
-                            (
+                            GREATEST(
                                 COALESCE(qty_in_stock, 0) -
                                 CASE label
                                     WHEN 'big_reserve_100' THEN 100
@@ -96,12 +96,13 @@ class CalculateOrderedAmountsForProducts extends Command
                                     WHEN 'small_reserve_10' THEN 10
                                     WHEN 'no_reserve' THEN 0
                                     ELSE 0
-                                END
+                                END,
+                                0
                             )
                         ) < 0 THEN NULL
                         ELSE (
                             (daily_demand * safety_stock) -
-                            (
+                            GREATEST(
                                 COALESCE(qty_in_stock, 0) -
                                 CASE label
                                     WHEN 'big_reserve_100' THEN 100
@@ -110,7 +111,8 @@ class CalculateOrderedAmountsForProducts extends Command
                                     WHEN 'small_reserve_10' THEN 10
                                     WHEN 'no_reserve' THEN 0
                                     ELSE 0
-                                END
+                                END,
+                                0
                             )
                         )
                     END

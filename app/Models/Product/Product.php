@@ -90,7 +90,9 @@ class Product extends BaseModel implements HasMedia
             return $this->qty_in_stock ?? 0;
         }
 
-        return ($this->qty_in_stock ?? 0) - $this->label->getAmount();
+        $result =  ($this->qty_in_stock ?? 0) - $this->label->getAmount();
+
+        return max($result, 0);
     }
 
     public function getQuantityToProcess()

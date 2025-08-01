@@ -36,28 +36,36 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 $query->whereIn('pack', $searchParams['packs']);
             })
             ->when(!empty($searchParams['qty_in_stock_from']), function (Builder $query) use ($searchParams) {
-                $query->whereRaw('COALESCE(qty_in_stock, 0) - (
-                CASE
-                    WHEN label = \'big_reserve_100\' THEN 100
-                    WHEN label = \'big_reserve_300\' THEN 300
-                    WHEN label = \'big_reserve_500\' THEN 500
-                    WHEN label = \'small_reserve_10\' THEN 10
-                    WHEN label = \'no_reserve\' THEN 0
-                    ELSE 0
-                END
-            ) >= ?', [$searchParams['qty_in_stock_from']]);
+                $query->whereRaw('
+                    GREATEST(
+                        COALESCE(qty_in_stock, 0) -
+                        CASE label
+                            WHEN \'big_reserve_100\' THEN 100
+                            WHEN \'big_reserve_300\' THEN 300
+                            WHEN \'big_reserve_500\' THEN 500
+                            WHEN \'small_reserve_10\' THEN 10
+                            WHEN \'no_reserve\' THEN 0
+                            ELSE 0
+                        END,
+                        0
+                    ) >= ?
+    ', [$searchParams['qty_in_stock_from']]);
             })
             ->when(!empty($searchParams['qty_in_stock_to']), function (Builder $query) use ($searchParams) {
-                $query->whereRaw('COALESCE(qty_in_stock, 0) - (
-                CASE
-                    WHEN label = \'big_reserve_100\' THEN 100
-                    WHEN label = \'big_reserve_300\' THEN 300
-                    WHEN label = \'big_reserve_500\' THEN 500
-                    WHEN label = \'small_reserve_10\' THEN 10
-                    WHEN label = \'no_reserve\' THEN 0
-                    ELSE 0
-                END
-            ) <= ?', [$searchParams['qty_in_stock_to']]);
+                $query->whereRaw('
+                    GREATEST(
+                        COALESCE(qty_in_stock, 0) -
+                        CASE label
+                            WHEN \'big_reserve_100\' THEN 100
+                            WHEN \'big_reserve_300\' THEN 300
+                            WHEN \'big_reserve_500\' THEN 500
+                            WHEN \'small_reserve_10\' THEN 10
+                            WHEN \'no_reserve\' THEN 0
+                            ELSE 0
+                        END,
+                        0
+                    ) <= ?
+                ', [$searchParams['qty_in_stock_to']]);
             })
             ->when(!empty($search['ordered_qty_from']), function (Builder $query) use ($searchParams) {
                 $query->where('ordered_qty', '>=', $searchParams['ordered_qty_from']);
@@ -88,16 +96,20 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                         $query->reorder($searchParams['order_by'], $searchParams['order_dir'] ?? 'desc');
                         break;
                     case 'leftovers':
-                        $query->reorder(DB::raw("COALESCE(qty_in_stock, 0) - (
-                            CASE
-                                WHEN label = 'big_reserve_100' THEN 100
-                                WHEN label = 'big_reserve_300' THEN 300
-                                WHEN label = 'big_reserve_500' THEN 500
-                                WHEN label = 'small_reserve_10' THEN 10
-                                WHEN label = 'no_reserve' THEN 0
-                                ELSE 0
-                            END
-                        )"), $searchParams['order_dir'] ?? 'desc');
+                        $query->reorder(DB::raw("
+                            GREATEST(
+                                COALESCE(qty_in_stock, 0) -
+                                CASE label
+                                    WHEN 'big_reserve_100' THEN 100
+                                    WHEN 'big_reserve_300' THEN 300
+                                    WHEN 'big_reserve_500' THEN 500
+                                    WHEN 'small_reserve_10' THEN 10
+                                    WHEN 'no_reserve' THEN 0
+                                    ELSE 0
+                                END,
+                                0
+                            )
+                        "), $searchParams['order_dir'] ?? 'desc');
                         break;
                 }
             });
