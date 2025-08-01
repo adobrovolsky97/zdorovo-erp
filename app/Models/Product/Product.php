@@ -100,7 +100,7 @@ class Product extends BaseModel implements HasMedia
         return $this->ordered_qty - $this->getCalculatedLeftover();
     }
 
-    public function getNewQuantityToProcessForSafetyStock(?int $safetyStock): float|int|null
+    public function getNewQuantityToProcessForSafetyStock(?int $safetyStock = null): float|int|null
     {
         $safetyStock = $safetyStock ?? $this->safety_stock;
 
