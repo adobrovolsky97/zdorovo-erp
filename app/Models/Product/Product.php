@@ -90,7 +90,7 @@ class Product extends BaseModel implements HasMedia
             return $this->qty_in_stock ?? 0;
         }
 
-        $result =  ($this->qty_in_stock ?? 0) - $this->label->getAmount();
+        $result = ($this->qty_in_stock ?? 0) - $this->label->getAmount();
 
         return max($result, 0);
     }
@@ -102,13 +102,13 @@ class Product extends BaseModel implements HasMedia
 
     public function getNewQuantityToProcessForSafetyStock(?int $safetyStock): float|int|null
     {
-        if(empty($this->daily_demand) || empty($safetyStock)) {
+        if (empty($this->daily_demand) || empty($safetyStock)) {
             return null;
         }
 
-        $result = $this->daily_demand * $safetyStock - $this->getCalculatedLeftover();
+        $result = $this->daily_demand * $safetyStock - $this->getCalculatedLeftover() + $this->ordered_qty;
 
-        if($result < 0) {
+        if ($result < 0) {
             return null;
         }
 
