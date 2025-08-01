@@ -80,52 +80,46 @@ class CalculateOrderedAmountsForProducts extends Command
     {
         DB::statement("
         UPDATE products
-        SET qty_to_process =
+        SET qty_to_process = (
             CASE
-                WHEN COALESCE(daily_demand, 0) > 0 AND COALESCE(safety_stock, 0) > 0 THEN
+                WHEN COALESCE(daily_demand, 0) = 0 OR COALESCE(safety_stock, 0) = 0 THEN NULL
+                ELSE
                     CASE
                         WHEN (
                             (daily_demand * safety_stock) -
                             (
-                                COALESCE(ordered_qty, 0) -
-                                COALESCE(
-                                    COALESCE(qty_in_stock, 0) -
-                                    CASE
-                                        WHEN label = 'big_reserve_100' THEN 100
-                                        WHEN label = 'big_reserve_300' THEN 300
-                                        WHEN label = 'big_reserve_500' THEN 500
-                                        WHEN label = 'small_reserve_10' THEN 10
-                                        WHEN label = 'no_reserve' THEN 0
-                                        ELSE 0
-                                    END,
-                                    0
-                                )
+                                COALESCE(qty_in_stock, 0) -
+                                CASE label
+                                    WHEN 'big_reserve_100' THEN 100
+                                    WHEN 'big_reserve_300' THEN 300
+                                    WHEN 'big_reserve_500' THEN 500
+                                    WHEN 'small_reserve_10' THEN 10
+                                    WHEN 'no_reserve' THEN 0
+                                    ELSE 0
+                                END
                             )
                         ) < 0 THEN NULL
                         ELSE (
                             (daily_demand * safety_stock) -
                             (
-                                COALESCE(ordered_qty, 0) -
-                                COALESCE(
-                                    COALESCE(qty_in_stock, 0) -
-                                    CASE
-                                        WHEN label = 'big_reserve_100' THEN 100
-                                        WHEN label = 'big_reserve_300' THEN 300
-                                        WHEN label = 'big_reserve_500' THEN 500
-                                        WHEN label = 'small_reserve_10' THEN 10
-                                        WHEN label = 'no_reserve' THEN 0
-                                        ELSE 0
-                                    END,
-                                    0
-                                )
+                                COALESCE(qty_in_stock, 0) -
+                                CASE label
+                                    WHEN 'big_reserve_100' THEN 100
+                                    WHEN 'big_reserve_300' THEN 300
+                                    WHEN 'big_reserve_500' THEN 500
+                                    WHEN 'small_reserve_10' THEN 10
+                                    WHEN 'no_reserve' THEN 0
+                                    ELSE 0
+                                END
                             )
                         )
                     END
-                ELSE NULL
             END
+        )
         WHERE id > 0
     ");
     }
+
 
     protected function updateDbData(array $orderedAmounts): void
     {
