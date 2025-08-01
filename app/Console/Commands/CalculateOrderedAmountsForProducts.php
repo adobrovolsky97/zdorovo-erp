@@ -78,48 +78,18 @@ class CalculateOrderedAmountsForProducts extends Command
 
     public static function recalculateQtyToProcess(): void
     {
-        DB::statement("
-        UPDATE products
-        SET qty_to_process = (
-            CASE
-                WHEN COALESCE(daily_demand, 0) = 0 OR COALESCE(safety_stock, 0) = 0 THEN NULL
-                ELSE
-                    CASE
-                        WHEN (
-                            (daily_demand * safety_stock) -
-                            GREATEST(
-                                COALESCE(qty_in_stock, 0) -
-                                CASE label
-                                    WHEN 'big_reserve_100' THEN 100
-                                    WHEN 'big_reserve_300' THEN 300
-                                    WHEN 'big_reserve_500' THEN 500
-                                    WHEN 'small_reserve_10' THEN 10
-                                    WHEN 'no_reserve' THEN 0
-                                    ELSE 0
-                                END,
-                                0
-                            )
-                        ) < 0 THEN NULL
-                        ELSE (
-                            (daily_demand * safety_stock) -
-                            GREATEST(
-                                COALESCE(qty_in_stock, 0) -
-                                CASE label
-                                    WHEN 'big_reserve_100' THEN 100
-                                    WHEN 'big_reserve_300' THEN 300
-                                    WHEN 'big_reserve_500' THEN 500
-                                    WHEN 'small_reserve_10' THEN 10
-                                    WHEN 'no_reserve' THEN 0
-                                    ELSE 0
-                                END,
-                                0
-                            )
-                        )
-                    END
-            END
-        )
-        WHERE id > 0
-    ");
+        Product::query()->update(['qty_to_process' => null]);
+
+        $products = Product::query()
+            ->where('daily_demand', '>', 0)
+            ->where('safety_stock', '>', 0)
+            ->cursor();
+
+        foreach ($products as $product) {
+            $product->update([
+                'qty_to_process' => $product->getNewQuantityToProcessForSafetyStock($product->safety_stock),
+            ]);
+        }
     }
 
 
