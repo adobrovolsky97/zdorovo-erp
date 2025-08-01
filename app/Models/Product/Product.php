@@ -102,11 +102,13 @@ class Product extends BaseModel implements HasMedia
 
     public function getNewQuantityToProcessForSafetyStock(?int $safetyStock): float|int|null
     {
+        $safetyStock = $safetyStock ?? $this->safety_stock;
+
         if (empty($this->daily_demand) || empty($safetyStock)) {
             return null;
         }
 
-        $result = $this->daily_demand * $safetyStock - $this->getCalculatedLeftover() + $this->ordered_qty;
+        $result = ($this->daily_demand * $safetyStock) - $this->getCalculatedLeftover() + $this->ordered_qty;
 
         if ($result < 0) {
             return null;

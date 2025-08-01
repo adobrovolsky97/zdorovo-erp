@@ -87,7 +87,7 @@ class CalculateOrderedAmountsForProducts extends Command
 
         foreach ($products as $product) {
             $product->update([
-                'qty_to_process' => $product->getNewQuantityToProcessForSafetyStock($product->safety_stock),
+                'qty_to_process' => $product->getNewQuantityToProcessForSafetyStock(),
             ]);
         }
     }
