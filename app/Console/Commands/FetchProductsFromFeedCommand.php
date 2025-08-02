@@ -111,7 +111,7 @@ class FetchProductsFromFeedCommand extends Command
                 'barcode'        => empty($product->barcode->__toString()) ? null : $product->barcode->__toString(),
                 'price'          => $product->vendorprice->__toString(),
                 'qty_in_stock'   => (float)$product->quantity_in_stock->__toString(),
-                'qty_to_process' => $existingProduct->getQuantityToProcess(),
+                'qty_to_process' => $existingProduct->getNewQuantityToProcessForSafetyStock(),
                 'deleted_at'     => null,
             ]);
 
