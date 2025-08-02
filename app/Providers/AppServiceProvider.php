@@ -6,6 +6,10 @@ use App\Models\Product\Product;
 use App\Observers\ProductObserver;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Export\Contracts\ExportRepositoryInterface;
+use App\Repositories\Export\ExportRepository;
+use App\Repositories\Import\Contracts\ImportRepositoryInterface;
+use App\Repositories\Import\ImportRepository;
 use App\Repositories\Notification\Contracts\NotificationRepositoryInterface;
 use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Package\Contracts\PackageRepositoryInterface;
@@ -20,6 +24,10 @@ use App\Services\Bimpsoft\BimpsoftService;
 use App\Services\Bimpsoft\Contracts\BimpsoftServiceInterface;
 use App\Services\Category\CategoryService;
 use App\Services\Category\Contracts\CategoryServiceInterface;
+use App\Services\Export\Contracts\ExportServiceInterface;
+use App\Services\Export\ExportService;
+use App\Services\Import\Contracts\ImportServiceInterface;
+use App\Services\Import\ImportService;
 use App\Services\Notification\Contracts\NotificationServiceInterface;
 use App\Services\Notification\NotificationService;
 use App\Services\Package\Contracts\PackageServiceInterface;
@@ -49,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(BimpsoftServiceInterface::class, BimpsoftService::class);
         $this->app->singleton(NotificationServiceInterface::class, NotificationService::class);
         $this->app->singleton(WarehouseServiceInterface::class, WarehouseService::class);
+        $this->app->singleton(ExportServiceInterface::class, ExportService::class);
+        $this->app->singleton(ImportServiceInterface::class, ImportService::class);
 
         /*
          * Repositories
@@ -59,6 +69,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PackageRepositoryInterface::class, PackageRepository::class);
         $this->app->singleton(NotificationRepositoryInterface::class, NotificationRepository::class);
         $this->app->singleton(WarehouseRepositoryInterface::class, WarehouseRepository::class);
+        $this->app->singleton(ExportRepositoryInterface::class, ExportRepository::class);
+        $this->app->singleton(ImportRepositoryInterface::class, ImportRepository::class);
     }
 
     /**

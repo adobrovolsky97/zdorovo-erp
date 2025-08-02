@@ -52,6 +52,28 @@
                                 </a>
                             </router-link>
                             <router-link
+                                v-if="user"
+                                :to="{name: 'exports'}"
+                                custom
+                                v-slot="{ navigate, href }"
+                            >
+                                <a class="tab" :class="{'tab-active': $route.path.startsWith('/exports')}"
+                                   @click="navigate">
+                                    Експорти
+                                </a>
+                            </router-link>
+                            <router-link
+                                v-if="user"
+                                :to="{name: 'imports'}"
+                                custom
+                                v-slot="{ navigate, href }"
+                            >
+                                <a class="tab" :class="{'tab-active': $route.path.startsWith('/imports')}"
+                                   @click="navigate">
+                                    Імпорти
+                                </a>
+                            </router-link>
+                            <router-link
                                 v-if="packer_user"
                                 :to="{name: 'packaging'}"
                                 custom

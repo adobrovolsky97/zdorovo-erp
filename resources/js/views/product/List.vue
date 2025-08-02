@@ -3,11 +3,11 @@
 
         <div class="flex flex-row justify-between items-center">
             <h1 class="text-3xl font-extrabold">Товари</h1>
-            <div
-                class="gap-4 mt-2">
-                <p class="badge badge-outline py-4 text-left text-sm">Знайдено товарів: {{
-                        data?.meta?.total ?? 0
-                    }}</p>
+
+            <div class="flex flex-row items-center gap-4">
+                <button @click="exportProducts" class="btn btn-sm btn-info rounded-full text-white">Експортувати</button>
+
+                <p class="badge badge-outline py-4 text-left text-sm">Знайдено товарів: {{data?.meta?.total ?? 0}}</p>
             </div>
         </div>
 
@@ -73,6 +73,7 @@ import {useRoute} from "vue-router";
 import axios from "axios";
 import Item from "./Item.vue";
 import TagInput from "../../components/TagInput/TagInput.vue";
+import {toast} from "vue3-toastify";
 
 export default {
     name: "List",
@@ -171,6 +172,15 @@ export default {
                     this.isDataLoaded = true;
                 });
         },
+        exportProducts() {
+            axios.post('/api/exports/products/create')
+                .then(() => {
+                    toast.success('Експорт успішно створено. Завантажте файл з вкладки експорти...');
+                })
+                .catch(() => {
+                    toast.error('Сталась помилка при експорті товарів.');
+                });
+        },
         /**
          * Resolve query params
          */
@@ -182,15 +192,6 @@ export default {
                 this.filters['categories[]'] = this.categories.filter(category => this.filters['categories[]'].includes(category.id.toString()));
             }
         },
-        toggleOrderDir() {
-            this.filters.order_dir = this.filters.order_dir === 'asc' ? 'desc' : 'asc';
-        },
-        delaySearch() {
-            clearTimeout(this.timer);
-            this.timer = setTimeout(() => {
-                this.filters.search = this.search;
-            }, 800);
-        }
     }
 }
 </script>

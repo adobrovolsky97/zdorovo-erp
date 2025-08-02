@@ -7,6 +7,7 @@ use App\Models\Product\Product;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Repositories\BaseRepository;
 use DB;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -14,6 +15,14 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
+    public function getAllPaginated(array $search = [], int $pageSize = 15): LengthAwarePaginator
+    {
+        return $this->applyFilters($search)->paginate(
+            perPage: $pageSize,
+            page: request('page', $search['page'] ?? 1),
+        );
+    }
+
     /**
      * @param array $searchParams
      * @return Builder

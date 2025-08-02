@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PackerController;
@@ -40,6 +42,23 @@ Route::group(['middleware' => ['auth:api,packer']], function () {
         Route::get('', [ProductController::class, 'index']);
         Route::get('tasks', [ProductController::class, 'getTasks']);
         Route::put('{product}', [ProductController::class, 'update']);
+    });
+
+    /**
+     * Exports
+     */
+    Route::group(['prefix' => 'exports'], function () {
+        Route::get('{export}/download', [ExportController::class, 'download']);
+        Route::get('', [ExportController::class, 'index']);
+        Route::post('{type}/create', [ExportController::class, 'export']);
+    });
+
+    /**
+     * Imports
+     */
+    Route::group(['prefix' => 'imports'], function () {
+        Route::get('', [ImportController::class, 'index']);
+        Route::post('{type}/upload', [ImportController::class, 'upload']);
     });
 
     /**

@@ -21,6 +21,18 @@ enum Label: string
         };
     }
 
+    public static function getByName(string $name): ?Label
+    {
+        return match ($name) {
+            'Великий резерв 100' => self::BIG_RESERVE_100,
+            'Великий резерв 300' => self::BIG_RESERVE_300,
+            'Великий резерв 500' => self::BIG_RESERVE_500,
+            'Малий резерв 10' => self::SMALL_RESERVE_10,
+            'Без резерву (ФК)' => self::NO_RESERVE,
+            default => null
+        };
+    }
+
     public function getAmount(): int
     {
         return match ($this) {
