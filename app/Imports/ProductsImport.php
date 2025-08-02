@@ -43,7 +43,7 @@ class ProductsImport implements ToCollection, WithChunkReading, WithStartRow
             $pack = null;
 
             if (!empty($row[3])) {
-                $pack = Pack::tryFrom($row[3]);
+                $pack = Pack::getByName($row[3]);
             }
 
             $product->updateQuietly([

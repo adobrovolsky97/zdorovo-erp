@@ -20,4 +20,16 @@ enum Pack: string
             self::BAG => 'Паперовий Мішок',
         };
     }
+
+    public static function getByName(string $name): ?self
+    {
+        return match ($name) {
+            '150' => self::VARIANT_150,
+            '250' => self::VARIANT_250,
+            '500' => self::VARIANT_500,
+            '1000' => self::VARIANT_1000,
+            'Паперовий Мішок' => self::BAG,
+            default => null,
+        };
+    }
 }
