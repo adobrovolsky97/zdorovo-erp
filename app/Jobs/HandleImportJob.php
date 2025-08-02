@@ -19,8 +19,6 @@ class HandleImportJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected const IMPORT_PATH = 'imports';
-
     protected Import $import;
 
     /**
@@ -45,11 +43,9 @@ class HandleImportJob implements ShouldQueue
         $import = new $importClass($this->import->params);
 
         try {
-            $path = self::IMPORT_PATH.'/'.$this->import->getKey().'/'.$this->import->name;
             Excel::import($import, $this->import->file_path);
             $this->import->update([
                 'status'    => Status::FINISHED,
-                'file_path' => $path
             ]);
         } catch (Throwable $exception) {
             $this->import->update([

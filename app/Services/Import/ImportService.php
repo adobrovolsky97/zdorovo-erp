@@ -27,14 +27,13 @@ class ImportService extends BaseCrudService implements ImportServiceInterface
      */
     public function upload(Type $type, UploadedFile $file, array $params = []): void
     {
-        $fileName = $file->getClientOriginalName().'_'.time().'.'.$file->getClientOriginalExtension();
+        $fileName = time() . '_' . $file->getClientOriginalName();
         $file->storeAs('imports', $fileName);
 
         $import = $this->create([
-            'type' => $type,
-            'file_name' => $fileName,
-            'file_path' => 'imports/'.$fileName,
-            'params' => $params,
+            'type'      => $type,
+            'file_path' => "imports/$fileName",
+            'params'    => $params,
         ]);
 
         HandleImportJob::dispatch($import);
