@@ -20,7 +20,10 @@ class ProductsExport implements FromCollection, ShouldAutoSize, WithHeadings, Wi
 
     public function __construct(array $searchParams)
     {
-        $this->searchParams = $searchParams;
+        // remove empty values from search parameters
+        $this->searchParams = array_filter($searchParams, function ($value) {
+            return $value !== null && $value !== '';
+        });
     }
 
     /**

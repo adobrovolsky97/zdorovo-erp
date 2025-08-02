@@ -173,7 +173,14 @@ export default {
                 });
         },
         exportProducts() {
-            axios.post('/api/exports/products/create')
+            let params = this.getQueryParams();
+            delete params.page;
+            axios.post('/api/exports/products/create', {
+                categories: params['categories[]'],
+                search: params.search,
+                is_available: params.is_available,
+                is_synced_with_crm: params.is_synced_with_crm
+            })
                 .then(() => {
                     toast.success('Експорт успішно створено. Завантажте файл з вкладки експорти...');
                 })
