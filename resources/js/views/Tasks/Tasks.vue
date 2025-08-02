@@ -284,9 +284,9 @@
                                 </select>
                             </th>
 
-                            <th v-if="productToEdit?.id !== item.id">{{ item.pack }}</th>
+                            <th v-if="productToEdit?.id !== item.id">{{ item.pack.name }}</th>
                             <th v-else>
-                                <select v-model="productToEdit.pack" class="select select-sm select-bordered w-30">
+                                <select v-model="productToEdit.pack.id" class="select select-sm select-bordered w-30">
                                     <option :value="null">Упаковку не обрано</option>
                                     <option :value="pack.id" v-for="pack in packValues" :key="pack.id">
                                         {{ pack.name }}
@@ -485,9 +485,9 @@ export default {
             }
             axios.put(`/api/products/${this.productToEdit.id}`, {
                 category_id: this.productToEdit.category.id,
-                pack: this.productToEdit.pack,
+                pack: this.productToEdit.pack?.id,
                 safety_stock: this.productToEdit.safety_stock,
-                label: this.productToEdit.label.id,
+                label: this.productToEdit.label?.id,
                 is_available: this.productToEdit.is_available
             })
                 .then(response => {

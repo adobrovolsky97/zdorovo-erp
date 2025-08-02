@@ -36,7 +36,7 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Назва</th>
+                            <th>Файл</th>
                             <th>Статус</th>
                             <th>Помилка</th>
                             <th>Час</th>
@@ -45,7 +45,7 @@
                         <tbody>
                         <tr v-for="item in data.data" :key="item.id">
                             <th>{{ item.id }}</th>
-                            <th>{{ item.name }}</th>
+                            <th>{{ item.file_path }}</th>
                             <th>{{ item.status }}</th>
                             <th>{{ item.error }}</th>
                             <th>{{ item.created_at }}</th>

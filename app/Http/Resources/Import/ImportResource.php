@@ -3,13 +3,14 @@
 namespace App\Http\Resources\Import;
 
 use App\Models\Export\Export;
+use App\Models\Import\Import;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class ImportResource
  *
- * @mixin Export
+ * @mixin Import
  */
 class ImportResource extends JsonResource
 {
@@ -22,7 +23,6 @@ class ImportResource extends JsonResource
     {
         return [
             'id'         => $this->id,
-            'name'       => $this->name,
             'file_path'  => $this->file_path,
             'status'     => $this->status,
             'error'      => $this->error,

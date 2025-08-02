@@ -22,7 +22,10 @@ class TaskResource extends JsonResource
         return [
             'id'                  => $this->id,
             'name'                => $this->name,
-            'pack'                => $this->pack?->title(),
+            'pack'                => [
+                'id'   => $this->pack?->value,
+                'name' => $this->pack?->title()
+            ],
             'label'               => [
                 'id'   => $this->label?->value,
                 'name' => $this->label?->title()
