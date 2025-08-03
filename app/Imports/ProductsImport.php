@@ -36,14 +36,14 @@ class ProductsImport implements ToCollection, WithChunkReading, WithStartRow
             }
 
             $label = null;
-            if (!empty($row[2])) {
-                $label = Label::getByName($row[2]);
+            if (!empty(trim($row[2]))) {
+                $label = Label::getByName(trim($row[2]));
             }
 
             $pack = null;
 
-            if (!empty($row[3])) {
-                $pack = Pack::getByName($row[3]);
+            if (!empty(trim($row[3]))) {
+                $pack = Pack::getByName((string)$row[3]);
             }
 
             $product->updateQuietly([
