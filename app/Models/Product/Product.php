@@ -108,6 +108,10 @@ class Product extends BaseModel implements HasMedia
             return null;
         }
 
+        if ($safetyStock === 100 && $this->ordered_qty >= 0.1) {
+            return $this->ordered_qty;
+        }
+
         $result = ($this->daily_demand * $safetyStock) - $this->getCalculatedLeftover() + $this->ordered_qty;
 
         if ($result < 0) {
