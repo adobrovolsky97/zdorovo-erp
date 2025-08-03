@@ -108,7 +108,7 @@ class Product extends BaseModel implements HasMedia
             return null;
         }
 
-        if ($safetyStock === 100 && $this->ordered_qty >= 0.1) {
+        if ($safetyStock === 100) {
             return $this->ordered_qty;
         }
 
