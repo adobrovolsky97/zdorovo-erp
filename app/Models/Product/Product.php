@@ -10,6 +10,7 @@ use App\Models\Category\Category;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\Image\Manipulations;
@@ -47,7 +48,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Product extends BaseModel implements HasMedia
 {
-    use InteractsWithMedia;
+    use InteractsWithMedia, SoftDeletes;
 
     /**
      * @var array
