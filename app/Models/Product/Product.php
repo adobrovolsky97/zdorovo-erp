@@ -73,7 +73,8 @@ class Product extends BaseModel implements HasMedia
         'daily_demand',
         'safety_stock',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'deleted_at'
     ];
 
     /**
