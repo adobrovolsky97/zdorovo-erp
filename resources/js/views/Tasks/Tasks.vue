@@ -421,7 +421,19 @@ export default {
                 {
                     id: 'bag',
                     name: 'Паперовий Мішок'
-                }
+                },
+                {
+                  id: 'polipropylen_bag',
+                    name: 'Поліпропіленовий мішок'
+                },
+                {
+                    id: '250-sh',
+                    name: '250-Ш'
+                },
+                {
+                    id: '250-b',
+                    name: '250-В'
+                },
             ]
         }
     },
