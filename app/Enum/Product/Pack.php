@@ -11,7 +11,7 @@ enum Pack: string
     case BAG = 'bag';
     case POLYPROPYLENE_BAG = 'polipropylen_bag';
     case SH_250 = '250-sh';
-    case B_250 = '250-b';
+    case B_500 = '500-b';
 
     public function title(): string
     {
@@ -23,7 +23,7 @@ enum Pack: string
             self::BAG => 'Паперовий Мішок',
             self::POLYPROPYLENE_BAG => 'Поліпропіленовий Мішок',
             self::SH_250 => '250-Ш',
-            self::B_250 => '250-В',
+            self::B_500 => '500-В',
         };
     }
 
@@ -37,7 +37,7 @@ enum Pack: string
             'Паперовий Мішок' => self::BAG,
             'Поліпропіленовий Мішок' => self::POLYPROPYLENE_BAG,
             '250-Ш' => self::SH_250,
-            '250-В' => self::B_250,
+            '250-В' => self::B_500,
             default => null,
         };
     }

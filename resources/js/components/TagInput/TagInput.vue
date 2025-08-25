@@ -7,7 +7,7 @@
             <input ref="search" @click="handleInputClick" type="text" @input="searchTag" :placeholder="placeholder"
                    class="input input-bordered w-full"/>
             <div class="p-2 rounded-b-box bg-base-200 block w-full absolute left-0 top-full  z-[99]" v-if="searchAreaShown">
-                <div v-if="optionsData.length > 0" class="badge badge-outline cursor-pointer p-3 m-1"
+                <div v-if="optionsData.length > 0" class="badge badge-outline cursor-pointer p-3 m-1 whitespace-nowrap"
                      @click="addTag(tag)"
                      v-for="tag in optionsData"
                      :key="tag.id">
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="selected mt-2 flex flex-wrap gap-1.5">
-            <div class="badge badge-neutral p-3" v-for="tag in localValue" :key="tag.id">
+            <div class="badge badge-neutral p-3 whitespace-nowrap" v-for="tag in localValue" :key="tag.id">
                 {{ tag.name }}
                 <svg xmlns="http://www.w3.org/2000/svg" @click="removeTag(tag)" fill="none" viewBox="0 0 24 24"
                      class="inline-block cursor-pointer w-4 h-4 stroke-current">
@@ -47,7 +47,7 @@ export default {
         },
         limit: {
             type: Number,
-            default: 5
+            default: 15
         },
         options: {
             type: Array,

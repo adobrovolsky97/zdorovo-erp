@@ -165,38 +165,14 @@ export default {
     data() {
         return {
             packValues: [
-                {
-                    id: '150',
-                    name: '150'
-                },
-                {
-                    id: '250',
-                    name: '250'
-                },
-                {
-                    id: '500',
-                    name: '500'
-                },
-                {
-                    id: '1000',
-                    name: '1000'
-                },
-                {
-                    id: 'bag',
-                    name: 'Паперовий Мішок'
-                },
-                {
-                    id: 'polipropylen_bag',
-                    name: 'Поліпропіленовий мішок'
-                },
-                {
-                    id: '250-sh',
-                    name: '250-Ш'
-                },
-                {
-                    id: '250-b',
-                    name: '250-В'
-                },
+                {id: '150', name: '150'},
+                {id: '250', name: '250'},
+                {id: '250-sh', name: '250-Ш'},
+                {id: '500', name: '500'},
+                {id: '500-b', name: '500-В'},
+                {id: '1000', name: '1000'},
+                {id: 'bag', name: 'Паперовий Мішок'},
+                {id: 'polipropylen_bag', name: 'Поліпропіленовий мішок'},
             ],
             timer: null,
             isModalShown: false,
