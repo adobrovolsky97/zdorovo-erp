@@ -28,7 +28,7 @@ class SyncProductsCommand extends Command
      */
     public function handle(BimpsoftServiceInterface $bimpsoftService, ProductServiceInterface $productService): void
     {
-        $preloadedProducts = $productService->find([['barcode', 'not_null'], ['bimpsoft_uuid', 'null']]);
+        $preloadedProducts = $productService->find([['barcode', 'not_null']]);
         $page = 1;
 
         if ($preloadedProducts->isEmpty()) {
@@ -43,7 +43,8 @@ class SyncProductsCommand extends Command
                 if (!empty($product['sku']) && !empty($productToUpdate = $preloadedProducts->where('barcode', $product['sku'])->first())) {
                     $this->info('Product with barcode ' . $product['sku'] . ' found in the database. Updating...');
                     $productToUpdate->update([
-                        'bimpsoft_uuid' => $product['uuid']
+                        'bimpsoft_uuid' => $product['uuid'],
+                        'uktzd' => empty($product['article']) ? null : $product['article'],
                     ]);
                 }
             }

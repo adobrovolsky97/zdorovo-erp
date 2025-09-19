@@ -72,6 +72,7 @@ class Product extends BaseModel implements HasMedia
         'qty_to_process',
         'daily_demand',
         'safety_stock',
+        'uktzd',
         'created_at',
         'updated_at',
         'deleted_at'

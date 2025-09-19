@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ExternalApiController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PackageController;
@@ -99,4 +100,11 @@ Route::group(['middleware' => ['auth:api,packer']], function () {
         Route::get('leftovers', [WarehouseController::class, 'getLeftovers']);
         Route::get('groups', [WarehouseController::class, 'getGroups']);
     });
+});
+
+/**
+ * External API
+ */
+Route::group(['prefix' => 'external', 'middleware' => ['client']], function () {
+    Route::get('bimpsoft-products', [ExternalApiController::class, 'getProducts']);
 });
