@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command(CalculateDailyDemandCommand::class)->everySixHours()->withoutOverlapping();
         $schedule->command(FetchProductsFromFeedCommand::class)->everyTenMinutes()->withoutOverlapping();
-        $schedule->command(SyncProductsCommand::class)->everyTenMinutes()->withoutOverlapping();
+        $schedule->command(SyncProductsCommand::class)->hourly()->withoutOverlapping();
         $schedule->command(SyncBimpsoftPrices::class)->everyTenMinutes()->withoutOverlapping();
         $schedule->command(SyncBimpsoftLeftovers::class)->everyFiveMinutes()->withoutOverlapping();
         $schedule->command(CalculateOrderedAmountsForProducts::class)->everyTenMinutes()->withoutOverlapping();
