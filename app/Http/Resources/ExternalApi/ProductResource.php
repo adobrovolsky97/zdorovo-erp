@@ -21,6 +21,7 @@ class ProductResource extends JsonResource
             'barcode' => $this->barcode,
             'bimpsoft_uuid' => $this->bimpsoft_uuid,
             'name' => $this->name,
+            'uktzd' => $this->uktzd,
         ];
     }
 }
