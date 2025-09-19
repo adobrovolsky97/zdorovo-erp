@@ -30,6 +30,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $barcode
  * @property string $name
  * @property string $group
+ * @property string $bimpsoft_name
  * @property Pack $pack
  * @property boolean $is_available
  * @property Label $label
@@ -73,6 +74,7 @@ class Product extends BaseModel implements HasMedia
         'daily_demand',
         'safety_stock',
         'uktzd',
+        'bimpsoft_name',
         'created_at',
         'updated_at',
         'deleted_at'
