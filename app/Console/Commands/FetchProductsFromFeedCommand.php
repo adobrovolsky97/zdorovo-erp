@@ -71,6 +71,11 @@ class FetchProductsFromFeedCommand extends Command
             }
         }
 
+        if(empty($this->processedExternalIds)) {
+            $this->warn('No products processed, skipping deletion of old products');
+            return;
+        }
+
         $this->productService
             ->withTrashed()
             ->find([['external_id', 'not_in', $this->processedExternalIds]])
