@@ -94,10 +94,15 @@ class FetchProductsFromFeedCommand extends Command
     protected function processProduct(object $product): void
     {
         $id = $product->attributes()->id->__toString();
+        $barcode = empty($product->barcode->__toString()) ? null : $product->barcode->__toString();
 
         $this->processedExternalIds[] = $id;
 
-        $existingProduct = $this->productService->withTrashed()->find(['external_id' => $id])->first();
+        if(!empty($barcode)) {
+            $existingProduct = $this->productService->withTrashed()->find(['barcode' => $barcode])->first();
+        } else {
+            $existingProduct = $this->productService->withTrashed()->find(['external_id' => $id])->first();
+        }
 
         if (!app()->isLocal()) {
             $imageUrl = $this->getSmallImageUrl($product->picture->__toString());
