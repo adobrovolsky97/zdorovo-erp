@@ -36,11 +36,13 @@ class SyncProductsCommand extends Command
             return;
         }
 
+        $collectedUuids = [];
         while (!empty($products = $bimpsoftService->getProducts($page))) {
 
             foreach ($products as $product) {
                 /** @var Product $productToUpdate */
                 if (!empty($product['sku'])) {
+                    $collectedUuids[] = $product['uuid'];
                     foreach ($preloadedProducts->where('barcode', $product['sku'])->whereNull('deleted_at') as $productToUpdate) {
                         $this->info('Product with barcode ' . $product['sku'] . ' found in the database. Updating...');
                         $productToUpdate->update([
@@ -54,5 +56,7 @@ class SyncProductsCommand extends Command
 
             $page++;
         }
+
+        Product::query()->whereNotIn('bimpsoft_uuid', $collectedUuids)->update(['bimpsoft_uuid' => null, 'bimpsoft_name' => null, 'uktzd' => null]);
     }
 }
