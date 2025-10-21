@@ -40,13 +40,15 @@ class SyncProductsCommand extends Command
 
             foreach ($products as $product) {
                 /** @var Product $productToUpdate */
-                if (!empty($product['sku']) && !empty($productToUpdate = $preloadedProducts->where('barcode', $product['sku'])->whereNull('deleted_at')->first())) {
-                    $this->info('Product with barcode ' . $product['sku'] . ' found in the database. Updating...');
-                    $productToUpdate->update([
-                        'bimpsoft_name' => $product['name'] ?? null,
-                        'bimpsoft_uuid' => $product['uuid'],
-                        'uktzd' => empty($product['article']) ? null : $product['article'],
-                    ]);
+                if (!empty($product['sku'])) {
+                    foreach ($preloadedProducts->where('barcode', $product['sku'])->whereNull('deleted_at') as $productToUpdate) {
+                        $this->info('Product with barcode ' . $product['sku'] . ' found in the database. Updating...');
+                        $productToUpdate->update([
+                            'bimpsoft_name' => $product['name'] ?? null,
+                            'bimpsoft_uuid' => $product['uuid'],
+                            'uktzd'         => empty($product['article']) ? null : $product['article'],
+                        ]);
+                    }
                 }
             }
 
